@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack & npx open http://localhost:3000/auth/login",
+    "dev": "next dev --turbopack & npx start http://localhost:3000/auth/login",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

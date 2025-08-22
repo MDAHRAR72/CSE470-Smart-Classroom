@@ -1,7 +1,12 @@
 "use client";
 
 import { Assignment } from "@/types/assignment";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/UserCard";
 import {
   addDays,
   endOfMonth,
@@ -40,7 +45,7 @@ export function CalendarComponent({ assignments }: CalendarProps) {
   };
 
   const getAssignmentsForDate = (date: Date) => {
-    return assignments.filter(assignment => {
+    return assignments.filter((assignment) => {
       const dueDate = new Date(assignment.dueDate);
       return dueDate.toDateString() === date.toDateString();
     });
@@ -66,7 +71,9 @@ export function CalendarComponent({ assignments }: CalendarProps) {
 
   const dayNames = useMemo(() => {
     const start = startOfWeek(value);
-    return Array.from({ length: 7 }).map((_, i) => format(addDays(start, i), "EEE"));
+    return Array.from({ length: 7 }).map((_, i) =>
+      format(addDays(start, i), "EEE")
+    );
   }, [value]);
 
   return (
@@ -130,7 +137,9 @@ export function CalendarComponent({ assignments }: CalendarProps) {
                       const inMonth = isSameMonth(day, value);
                       const todays = isToday(day);
                       const items = getAssignmentsForDate(day);
-                      const hasPending = items.some((a) => a.status === "pending");
+                      const hasPending = items.some(
+                        (a) => a.status === "pending"
+                      );
                       return (
                         <td
                           key={day.toISOString()}

@@ -1,6 +1,11 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/UserCard";
 import { Megaphone, CalendarDays } from "lucide-react";
 
 interface Notice {
@@ -55,7 +60,9 @@ export function NoticeBoard() {
                   {new Date(notice.date).toLocaleDateString()}
                 </span>
               </div>
-              <p className="mt-1 text-sm text-muted-foreground">{notice.body}</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {notice.body}
+              </p>
             </li>
           ))}
         </ul>
@@ -63,5 +70,3 @@ export function NoticeBoard() {
     </Card>
   );
 }
-
-

@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/UserCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Check, Trash2 } from "lucide-react";
@@ -26,13 +31,15 @@ export function TodoList() {
   };
 
   const toggleTodo = (id: string) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
   };
 
   const deleteTodo = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   return (
@@ -42,7 +49,7 @@ export function TodoList() {
       </CardHeader>
       <CardContent>
         <form
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
             addTodo();
           }}
@@ -51,12 +58,12 @@ export function TodoList() {
           <Input
             placeholder="Add a new task..."
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
           />
           <Button type="submit">Add</Button>
         </form>
         <ul className="space-y-2">
-          {todos.map(todo => (
+          {todos.map((todo) => (
             <li
               key={todo.id}
               className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded shadow-sm"
@@ -75,7 +82,9 @@ export function TodoList() {
                 size="icon"
                 className="ml-2"
                 onClick={() => toggleTodo(todo.id)}
-                title={todo.completed ? "Mark as Incomplete" : "Mark as Complete"}
+                title={
+                  todo.completed ? "Mark as Incomplete" : "Mark as Complete"
+                }
               >
                 <Check className="h-4 w-4" />
               </Button>
@@ -92,7 +101,9 @@ export function TodoList() {
           ))}
         </ul>
         {todos.length === 0 && (
-          <p className="text-gray-400 text-center mt-4">No tasks yet. Add one above!</p>
+          <p className="text-gray-400 text-center mt-4">
+            No tasks yet. Add one above!
+          </p>
         )}
       </CardContent>
     </Card>

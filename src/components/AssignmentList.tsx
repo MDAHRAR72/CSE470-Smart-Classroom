@@ -1,9 +1,13 @@
 "use client";
 
 import { Assignment } from "@/types/assignment";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/UserCard";
 import { Button } from "@/components/ui/button";
-
 
 interface AssignmentListProps {
   assignments: Assignment[];
@@ -43,15 +47,19 @@ export function AssignmentList({
                   <td className="py-2">{assignment.title}</td>
                   <td className="py-2">{assignment.courseName ?? "-"}</td>
                   <td className="py-2">{assignment.description}</td>
-                  <td className="py-2">{new Date(assignment.dueDate).toLocaleDateString()}</td>
                   <td className="py-2">
-                    <div className={`px-2 py-1 rounded-full text-sm ${
-                      assignment.status === "completed"
-                        ? "bg-green-100 text-green-800"
-                        : assignment.status === "in-progress"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}>
+                    {new Date(assignment.dueDate).toLocaleDateString()}
+                  </td>
+                  <td className="py-2">
+                    <div
+                      className={`px-2 py-1 rounded-full text-sm ${
+                        assignment.status === "completed"
+                          ? "bg-green-100 text-green-800"
+                          : assignment.status === "in-progress"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
                       {assignment.status}
                     </div>
                   </td>

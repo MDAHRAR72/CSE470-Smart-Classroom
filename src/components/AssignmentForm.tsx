@@ -5,7 +5,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/UserCard";
 
 const assignmentSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -26,7 +31,11 @@ interface AssignmentFormProps {
   setIsOpen: (isOpen: boolean) => void;
 }
 
-export function AssignmentForm({ onSubmit, isOpen, setIsOpen }: AssignmentFormProps) {
+export function AssignmentForm({
+  onSubmit,
+  isOpen,
+  setIsOpen,
+}: AssignmentFormProps) {
   const {
     register,
     handleSubmit,
@@ -56,9 +65,9 @@ export function AssignmentForm({ onSubmit, isOpen, setIsOpen }: AssignmentFormPr
         className="fixed top-1/2 left-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 
                    transform transition-transform duration-300 scale-100"
       >
-          <CardHeader>
-            <CardTitle>Add New Assignment</CardTitle>
-          </CardHeader>
+        <CardHeader>
+          <CardTitle>Add New Assignment</CardTitle>
+        </CardHeader>
         <CardContent>
           <form
             onSubmit={handleSubmit((data: AssignmentFormValues) => {
@@ -77,20 +86,32 @@ export function AssignmentForm({ onSubmit, isOpen, setIsOpen }: AssignmentFormPr
               <div>
                 <Input placeholder="Description" {...register("description")} />
                 {errors.description && (
-                  <p className="text-sm text-red-500">{errors.description.message}</p>
+                  <p className="text-sm text-red-500">
+                    {errors.description.message}
+                  </p>
                 )}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <Input placeholder="Course Name" {...register("courseName")} />
+                  <Input
+                    placeholder="Course Name"
+                    {...register("courseName")}
+                  />
                   {errors.courseName && (
-                    <p className="text-sm text-red-500">{errors.courseName.message as string}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.courseName.message as string}
+                    </p>
                   )}
                 </div>
                 <div>
-                  <Input placeholder="Assigned By" {...register("assignedBy")} />
+                  <Input
+                    placeholder="Assigned By"
+                    {...register("assignedBy")}
+                  />
                   {errors.assignedBy && (
-                    <p className="text-sm text-red-500">{errors.assignedBy.message as string}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.assignedBy.message as string}
+                    </p>
                   )}
                 </div>
               </div>
@@ -98,13 +119,17 @@ export function AssignmentForm({ onSubmit, isOpen, setIsOpen }: AssignmentFormPr
                 <div>
                   <Input type="date" {...register("dueDate")} />
                   {errors.dueDate && (
-                    <p className="text-sm text-red-500">{errors.dueDate.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.dueDate.message}
+                    </p>
                   )}
                 </div>
                 <div>
                   <Input type="time" {...register("dueTime")} />
                   {errors.dueTime && (
-                    <p className="text-sm text-red-500">{errors.dueTime.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.dueTime.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -118,7 +143,9 @@ export function AssignmentForm({ onSubmit, isOpen, setIsOpen }: AssignmentFormPr
                     {...register("maxMarks", { valueAsNumber: true })}
                   />
                   {errors.maxMarks && (
-                    <p className="text-sm text-red-500">{errors.maxMarks.message as string}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.maxMarks.message as string}
+                    </p>
                   )}
                 </div>
                 <div>

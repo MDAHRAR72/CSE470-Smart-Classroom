@@ -4,7 +4,12 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/UserCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
@@ -133,84 +138,123 @@ export default function ProfileEditPage() {
                   <label className="block mb-1 font-medium">First Name</label>
                   <Input {...register("firstName")} />
                   {errors.firstName && (
-                    <p className="text-sm text-red-500">{errors.firstName.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.firstName.message}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-1">
                   <label className="block mb-1 font-medium">Last Name</label>
                   <Input {...register("lastName")} />
                   {errors.lastName && (
-                    <p className="text-sm text-red-500">{errors.lastName.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.lastName.message}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-1">
                   <label className="block mb-1 font-medium">Email</label>
                   <Input type="email" {...register("email")} />
                   {errors.email && (
-                    <p className="text-sm text-red-500">{errors.email.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.email.message}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-1">
                   <label className="block mb-1 font-medium">Student ID</label>
                   <Input {...register("studentId")} />
                   {errors.studentId && (
-                    <p className="text-sm text-red-500">{errors.studentId.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.studentId.message}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-1">
-                  <label className="block mb-1 font-medium">Date of Birth</label>
+                  <label className="block mb-1 font-medium">
+                    Date of Birth
+                  </label>
                   <Input type="date" {...register("dateOfBirth")} />
                   {errors.dateOfBirth && (
-                    <p className="text-sm text-red-500">{errors.dateOfBirth.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.dateOfBirth.message}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-1">
                   <label className="block mb-1 font-medium">Phone</label>
                   <Input {...register("phone")} />
                   {errors.phone && (
-                    <p className="text-sm text-red-500">{errors.phone.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.phone.message}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-1">
                   <label className="block mb-1 font-medium">Major</label>
                   <Input {...register("major")} />
                   {errors.major && (
-                    <p className="text-sm text-red-500">{errors.major.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.major.message}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-1">
                   <label className="block mb-1 font-medium">Semester</label>
                   <Input {...register("semester")} />
                   {errors.semester && (
-                    <p className="text-sm text-red-500">{errors.semester.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.semester.message}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-1">
                   <label className="block mb-1 font-medium">Year</label>
-                  <Input type="number" min={1} max={8} {...register("year", { valueAsNumber: true })} />
+                  <Input
+                    type="number"
+                    min={1}
+                    max={8}
+                    {...register("year", { valueAsNumber: true })}
+                  />
                   {errors.year && (
-                    <p className="text-sm text-red-500">{errors.year.message as string}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.year.message as string}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-1">
                   <label className="block mb-1 font-medium">CGPA</label>
-                  <Input type="number" step="0.01" min={0} max={4} {...register("gpa", { valueAsNumber: true })} />
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min={0}
+                    max={4}
+                    {...register("gpa", { valueAsNumber: true })}
+                  />
                   {errors.gpa && (
-                    <p className="text-sm text-red-500">{errors.gpa.message as string}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.gpa.message as string}
+                    </p>
                   )}
                 </div>
                 <div className="md:col-span-2">
                   <label className="block mb-1 font-medium">Address</label>
                   <Input {...register("address")} />
                   {errors.address && (
-                    <p className="text-sm text-red-500">{errors.address.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.address.message}
+                    </p>
                   )}
                 </div>
               </div>
 
-              <Button type="submit" className="w-full">Save Changes</Button>
+              <Button type="submit" className="w-full">
+                Save Changes
+              </Button>
               {success && (
-                <p className="text-green-600 text-center mt-2">Profile updated!</p>
+                <p className="text-green-600 text-center mt-2">
+                  Profile updated!
+                </p>
               )}
             </form>
           </CardContent>

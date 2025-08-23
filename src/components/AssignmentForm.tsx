@@ -10,7 +10,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/UserCard";
+} from "@/components/UserCard";
 
 const assignmentSchema = z.object({
   title: z.string().min(1, "Title is required"),

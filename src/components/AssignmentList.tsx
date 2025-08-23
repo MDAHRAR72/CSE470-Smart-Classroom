@@ -6,7 +6,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/UserCard";
+} from "@/components/UserCard";
 import { Button } from "@/components/ui/button";
 
 interface AssignmentListProps {

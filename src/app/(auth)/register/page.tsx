@@ -11,7 +11,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/UserCard";
+} from "@/components/UserCard";
 
 const registerSchema = z.object({
   fname: z.string().min(2, "First name required"),

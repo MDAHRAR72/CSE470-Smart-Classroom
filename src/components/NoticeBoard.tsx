@@ -5,7 +5,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/UserCard";
+} from "@/components/UserCard";
 import { Megaphone, CalendarDays } from "lucide-react";
 
 interface Notice {

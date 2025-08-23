@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-} from "@/components/ui/UserCard";
+} from "@/components/UserCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";

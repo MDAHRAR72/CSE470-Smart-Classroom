@@ -1,10 +1,13 @@
-import UserCard from "@/components/ui/UserCard";
+import AttendanceChart from "@/components/AttendanceChart";
+import RadialChart from "@/components/RadialChart";
+import UserCard from "@/components/UserCard";
+import { RadialBarChart } from "recharts";
 
 const AdminPage = () => {
   return (
     <div className="p-4 flex gap-4 flex-col md:flex-row">
       {/*left*/}
-      <div className="w-full lg:w-2/3">
+      <div className="w-full lg:w-2/3 flex flex-col gap-8">
         {/*UserCards*/}
         <div className="flex gap-4 justify-between flex-wrap">
           <UserCard type="student" />
@@ -12,6 +15,20 @@ const AdminPage = () => {
           <UserCard type="parent" />
           <UserCard type="staff" />
         </div>
+        {/*MiddleCharts*/}
+        <div className="flex gap-4 flex-col lg:flex-row">
+          <div className="w-full lg:w-1/3 h-[450px]">
+            <RadialChart />
+          </div>
+          {/*AttendanceCharts*/}
+          <div className="w-full lg:w-2/3 h-[450px]">
+            <AttendanceChart />
+          </div>
+        </div>
+        {/*CountCharts*/}
+
+        {/*BottomCharts*/}
+        <div className=""></div>
       </div>
       {/*right*/}
       <div className="w-full lg:w-1/3">r</div>

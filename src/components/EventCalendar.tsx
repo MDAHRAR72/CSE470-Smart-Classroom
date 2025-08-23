@@ -1,9 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+
+const Calendar = dynamic(() => import("react-calendar"), { ssr: false });
 
 type ValuePiece = Date | null;
 
@@ -33,8 +35,9 @@ const events = [
 const EventCalendar = () => {
   const [value, onChange] = useState<Value>(new Date());
   return (
-    <div className="bg-white p-4 rounded-md ">
+    <div className="bg-white p-5 border-2 rounded-2xl">
       <Calendar onChange={onChange} value={value} />
+      <div className="border-t border-gray-300 my-4"></div>
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold my-4">Events</h1>
         <Image src="/moreDark.png" alt="" width={20} height={20} />

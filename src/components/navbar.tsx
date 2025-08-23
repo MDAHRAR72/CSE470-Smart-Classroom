@@ -9,6 +9,12 @@ const Navbar = () => {
         <Image src="/search.png" alt="" width={14} height={14} />
         <input type="text" placeholder="Search..." />
       </div>
+      {/*search bar*/}
+      <div className="flex items-center gap-5 justify-end w-full">
+        <h2 className="hidden lg:block text-xl font-semibold text-gray-800 px-4 py-2">
+          Welcome, John Doe
+        </h2>
+      </div>
       {/*avatar and icons*/}
       <div className="flex items-center gap-5 justify-end w-full">
         <div className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer">
@@ -16,7 +22,7 @@ const Navbar = () => {
         </div>
         <div className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative">
           <Image src="/announcement.png" alt="" width={20} height={20} />
-          <div className="absolute -top-3 -right-3 w-5 h-5 flex items-center justify-center bg-purple-500 text-white rounded-full text-xs">
+          <div className="absolute -top-3 -right-3 w-5 h-5 flex items-center justify-center bg-purple-500 text-white rounded-full text-xs ">
             1
           </div>
         </div>
@@ -25,7 +31,7 @@ const Navbar = () => {
           alt=""
           width={36}
           height={36}
-          className="rounded-full"
+          className="rounded-full cursor-pointer"
         />
       </div>
     </div>

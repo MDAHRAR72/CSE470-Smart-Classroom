@@ -11,7 +11,7 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // 🔹 Dummy user database (Replace with DB later)
+        // Dummy user database (Replace with DB later)
         const users = [
           { id: "1", name: "John Doe", email: "john@example.com", password: "123456" },
         ];

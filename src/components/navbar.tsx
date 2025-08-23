@@ -5,11 +5,15 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between p-4">
       {/*search bar*/}
-      <div className="hidden md:flex items-center gap-2 tex-xs rounded-full ring-[1.5px] ring-gray-300 px-2">
-        <Image src="/search.png" alt="" width={14} height={14} />
-        <input type="text" placeholder="Search..." />
+      <div className="hidden md:flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-gray-300 px-2">
+        <Image src="/search.png" alt="" width={20} height={20} />
+        <input
+          type="text"
+          placeholder="Search..."
+          className="w-[200px] p-2 bg-transparent outline-none"
+        />
       </div>
-      {/*search bar*/}
+      {/*Welcome*/}
       <div className="flex items-center gap-5 justify-end w-full">
         <h2 className="hidden lg:block text-xl font-semibold text-gray-800 px-4 py-2">
           Welcome, John Doe

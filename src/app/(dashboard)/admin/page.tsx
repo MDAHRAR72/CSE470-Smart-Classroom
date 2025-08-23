@@ -1,7 +1,7 @@
 import AttendanceChart from "@/components/AttendanceChart";
+import EventCalendar from "@/components/EventCalendar";
 import RadialChart from "@/components/RadialChart";
 import UserCard from "@/components/UserCard";
-import { RadialBarChart } from "recharts";
 
 const AdminPage = () => {
   return (
@@ -25,13 +25,11 @@ const AdminPage = () => {
             <AttendanceChart />
           </div>
         </div>
-        {/*CountCharts*/}
-
-        {/*BottomCharts*/}
-        <div className=""></div>
       </div>
       {/*right*/}
-      <div className="w-full lg:w-1/3">r</div>
+      <div className="w-full lg:w-1/3 flex flex-col gap-8">
+        <EventCalendar />
+      </div>
     </div>
   );
 };

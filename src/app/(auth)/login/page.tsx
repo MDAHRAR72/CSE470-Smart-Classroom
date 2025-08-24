@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import InputField from "@/components/InputField";
+import Link from "next/link";
+import Image from "next/image";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email"),
@@ -48,33 +50,42 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <InputField placeholder="Email" {...register("email")} />
-          {errors.email && (
-            <p className="text-sm text-red-500">{errors.email.message}</p>
-          )}
-        </div>
-        <div>
+      <div className="flex flex-col justify-between items-center bg-[#C3EBFA] p-4 rounded-xl w-[400px] shadow-2xl">
+        <Link
+          href="/"
+          className="flex items-center justify-center lg:justify-start gap-4 pb-4"
+        >
+          <Image src="/logo.png" alt="logo" width={50} height={50} />
+          <span className="hidden lg:block text-2xl font-bold">
+            Smart Classroom
+          </span>
+        </Link>
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <InputField
-            type="password"
-            placeholder="Password"
-            {...register("password")}
+            label="Email"
+            type="email"
+            name="email"
+            register={register}
+            error={errors.email}
           />
-          {errors.password && (
-            <p className="text-sm text-red-500">{errors.password.message}</p>
-          )}
-        </div>
-        <Button type="submit" className="w-full">
-          Login
-        </Button>
-        <p className="mt-2 text-center text-sm text-gray-500">
-          Don&apos;t have an account?{" "}
-          <a href="/register" className="text-blue-600 hover:underline">
-            Register
-          </a>
-        </p>
-      </form>
+          <InputField
+            label="Password"
+            type="password"
+            name="password"
+            register={register}
+            error={errors.password}
+          />
+          <Button type="submit" className="w-full mt-2">
+            Login
+          </Button>
+          <p className="mt-2 text-center text-sm text-gray-500">
+            Don&apos;t have an account?{" "}
+            <a href="/register" className="text-blue-600 hover:underline">
+              Register
+            </a>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

@@ -24,48 +24,49 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (_data: RegisterForm) => {
-    // TODO: Hook up to registration API
-  };
+  const onSubmit = (_data: RegisterForm) => {};
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md shadow-lg">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <InputField placeholder="First Name" {...register("fname")} />
-            {errors.fname && (
-              <p className="text-sm text-red-500">{errors.fname.message}</p>
-            )}
-          </div>
-          <div>
-            <InputField placeholder="Last Name" {...register("lname")} />
-            {errors.lname && (
-              <p className="text-sm text-red-500">{errors.lname.message}</p>
-            )}
-          </div>
-          <div>
-            <InputField placeholder="Email" {...register("email")} />
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
-          </div>
-          <div>
-            <InputField
-              type="password"
-              placeholder="Password"
-              {...register("password")}
-            />
-            {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
-            )}
-          </div>
+          <InputField
+            label="First Name"
+            name="fname"
+            register={register}
+            error={errors.fname}
+          />
+
+          <InputField
+            label="Last Name"
+            name="lname"
+            register={register}
+            error={errors.lname}
+          />
+
+          <InputField
+            label="Email"
+            name="email"
+            type="email"
+            register={register}
+            error={errors.email}
+          />
+
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+            register={register}
+            error={errors.password}
+          />
+
           <Button type="submit" className="w-full">
             Register
           </Button>
+
           <p className="mt-2 text-center text-sm text-gray-500">
             Already have an account?{" "}
-            <a href="/auth/login" className="text-blue-600 hover:underline">
+            <a href="/login" className="text-blue-600 hover:underline">
               Login
             </a>
           </p>

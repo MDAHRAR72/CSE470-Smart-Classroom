@@ -12,7 +12,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const loginSchema = z.object({
-  email: z.string().email("Invalid email"),
+  email: z.email({ message: "Invalid email" }),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
@@ -49,36 +49,43 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="flex flex-col justify-between items-center bg-[#C3EBFA] p-4 rounded-xl w-[400px] shadow-2xl">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="flex flex-col justify-between items-center bg-[#C3EBFA] p-4 rounded-xl w-[400px] shadow-2xl ">
         <Link
           href="/"
-          className="flex items-center justify-center lg:justify-start gap-4 pb-4"
+          className="flex items-center justify-center lg:justify-start gap-4 p-4 m-5"
         >
           <Image src="/logo.png" alt="logo" width={50} height={50} />
           <span className="hidden lg:block text-2xl font-bold">
             Smart Classroom
           </span>
         </Link>
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-          <InputField
-            label="Email"
-            type="email"
-            name="email"
-            register={register}
-            error={errors.email}
-          />
-          <InputField
-            label="Password"
-            type="password"
-            name="password"
-            register={register}
-            error={errors.password}
-          />
-          <Button type="submit" className="w-full mt-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+          <div className="flex justify-between flex-wrap gap-4">
+            <InputField
+              label="Email"
+              type="email"
+              name="email"
+              register={register}
+              error={errors.email}
+              className="md:w-full"
+            />
+            <InputField
+              label="Password"
+              type="password"
+              name="password"
+              register={register}
+              error={errors.password}
+              className="md:w-full"
+            />
+          </div>
+          <Button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-xl w-full mt-5"
+          >
             Login
           </Button>
-          <p className="mt-2 text-center text-sm text-gray-500">
+          <p className="mt-2 text-center text-sm text-gray-500 p-4">
             Don&apos;t have an account?{" "}
             <a href="/register" className="text-blue-600 hover:underline">
               Register

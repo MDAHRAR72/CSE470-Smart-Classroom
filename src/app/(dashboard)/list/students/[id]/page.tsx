@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const SingleTeacherPage = () => {
+const SingleStudentPage = () => {
   return (
     <div className="flex-1 p-4 flex flex-col gap-4 xl:flex-row">
       {/*Left*/}
@@ -16,7 +16,7 @@ const SingleTeacherPage = () => {
           <div className="bg-blue-200 py-6 px-4 rounded-xl flex-1 flex gap-4">
             <div className="w-1/3">
               <Image
-                src="https://images.pexels.com/photos/12257911/pexels-photo-12257911.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                src="https://images.pexels.com/photos/8147397/pexels-photo-8147397.jpeg?auto=compress&cs=tinysrgb&w=1200"
                 alt=""
                 width={144}
                 height={144}
@@ -24,7 +24,7 @@ const SingleTeacherPage = () => {
               ></Image>
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
-              <h1 className="text-xl font-semibold">Super Man</h1>
+              <h1 className="text-xl font-semibold">Super Girl</h1>
               <p className="text-sm text-gray-500">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -75,8 +75,8 @@ const SingleTeacherPage = () => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">3</h1>
-                <span className="text-sm text-gray-500">Branch</span>
+                <h1 className="text-xl font-semibold">10th</h1>
+                <span className="text-sm text-gray-500">Grade</span>
               </div>
             </div>
             {/*Card*/}
@@ -89,7 +89,7 @@ const SingleTeacherPage = () => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">7</h1>
+                <h1 className="text-xl font-semibold">15</h1>
                 <span className="text-sm text-gray-500">Lessons</span>
               </div>
             </div>
@@ -103,15 +103,15 @@ const SingleTeacherPage = () => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">5</h1>
-                <span className="text-sm text-gray-500">Classes</span>
+                <h1 className="text-xl font-semibold">10B</h1>
+                <span className="text-sm text-gray-500">Class</span>
               </div>
             </div>
           </div>
         </div>
         {/*Bottom*/}
         <div className="mt-4 bg-white rounded-xl p-4 h-[800px]">
-          <h1 className="text-lg font-semibold">Teacher&apos;s Schedule</h1>
+          <h1 className="text-lg font-semibold">Student&apos;s Schedule</h1>
           <BigCalendar />
         </div>
       </div>
@@ -121,19 +121,19 @@ const SingleTeacherPage = () => {
           <h1 className="text-xl font-semibold">Shortcuts</h1>
           <div className="mt-4 flex gap-4 flex-wrap text-xs text-gray-500">
             <Link className="p-3 rounded-xl bg-blue-100" href="/">
-              Teacher&apos;s Classes
+              Student&apos;s Lessons
             </Link>
             <Link className="p-3 rounded-xl bg-purple-100" href="/">
-              Teacher&apos;s Students
-            </Link>
-            <Link className="p-3 rounded-xl bg-blue-100" href="/">
-              Teacher&apos;s Lessons
+              Student&apos;s Teachers
             </Link>
             <Link className="p-3 rounded-xl bg-purple-100" href="/">
-              Teacher&apos;s Exams
+              Student&apos;s Exams
             </Link>
             <Link className="p-3 rounded-xl bg-blue-100" href="/">
-              Teacher&apos;s Assignments
+              Student&apos;s Assignments
+            </Link>
+            <Link className="p-3 rounded-xl bg-blue-100" href="/">
+              Student&apos;s Results
             </Link>
           </div>
         </div>
@@ -144,4 +144,4 @@ const SingleTeacherPage = () => {
   );
 };
 
-export default SingleTeacherPage;
+export default SingleStudentPage;

@@ -1,6 +1,8 @@
 import Announcements from "@/components/Announcements";
 import BigCalendar from "@/components/BigCalendar";
+import FormModal from "@/components/FormModal";
 import Performance from "@/components/Performance";
+import { role } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -13,7 +15,7 @@ const SingleTeacherPage = () => {
         {/*Top*/}
         <div className="flex flex-col lg:flex-row gap-4">
           {/*User Info Card*/}
-          <div className="bg-blue-200 py-6 px-4 rounded-xl flex-1 flex gap-4">
+          <div className="bg-[#C3EBFA] py-6 px-4 rounded-xl flex-1 flex gap-4">
             <div className="w-1/3">
               <Image
                 src="https://images.pexels.com/photos/12257911/pexels-photo-12257911.jpeg?auto=compress&cs=tinysrgb&w=1200"
@@ -24,7 +26,29 @@ const SingleTeacherPage = () => {
               ></Image>
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
-              <h1 className="text-xl font-semibold">Super Man</h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-xl font-semibold">Super Man</h1>
+                {role === "admin" && (
+                  <FormModal
+                    table="teacher"
+                    type="update"
+                    data={{
+                      id: 1,
+                      username: "professor",
+                      email: "user@gmail.com",
+                      password: "asdfasdfsadf",
+                      firstName: "hello",
+                      lastName: "professor",
+                      phone: "+8801946464646",
+                      address: "12/13 Basha, Basha",
+                      bloodType: "A+",
+                      birthDate: "2000-01-01",
+                      sex: "female",
+                      img: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=1200",
+                    }}
+                  />
+                )}
+              </div>
               <p className="text-sm text-gray-500">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.

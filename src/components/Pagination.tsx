@@ -10,11 +10,13 @@ const Pagination = () => {
         Prev
       </button>
       <div className="flex items-center gap-2 text-sm">
-        <button className="px-2 rounded-sm bg-blue-100">1</button>
-        <button className="px-2 rounded-sm ">2</button>
-        <button className="px-2 rounded-sm ">3</button>
+        <button className="px-2 rounded-sm bg-blue-100 cursor-pointer">
+          1
+        </button>
+        <button className="px-2 rounded-sm cursor-pointer">2</button>
+        <button className="px-2 rounded-sm cursor-pointer">3</button>
         ...
-        <button className="px-2 rounded-sm ">10</button>
+        <button className="px-2 rounded-sm cursor-pointer">10</button>
       </div>
       <button
         disabled

@@ -583,7 +583,7 @@ export const assignmentsData = [
   },
 ];
 
-export const resultsData = [
+export const gradesheetsData = [
   {
     id: 1,
     subject: "Math",

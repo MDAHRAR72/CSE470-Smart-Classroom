@@ -1,14 +1,13 @@
-// app/auth/login/page.tsx
+// app/login/page.tsx
 "use client";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-// import { UserCard } from "@/components/ui/UserCard";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import InputField from "@/components/InputField";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email"),
@@ -37,7 +36,7 @@ export default function LoginPage() {
       });
 
       if (result?.ok) {
-        router.push("/dashboard");
+        router.push("/admin");
         router.refresh();
       } else {
         console.error("Login failed:", result?.error);
@@ -51,13 +50,13 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <Input placeholder="Email" {...register("email")} />
+          <InputField placeholder="Email" {...register("email")} />
           {errors.email && (
             <p className="text-sm text-red-500">{errors.email.message}</p>
           )}
         </div>
         <div>
-          <Input
+          <InputField
             type="password"
             placeholder="Password"
             {...register("password")}
@@ -70,8 +69,8 @@ export default function LoginPage() {
           Login
         </Button>
         <p className="mt-2 text-center text-sm text-gray-500">
-          Don’t have an account?{" "}
-          <a href="/auth/register" className="text-blue-600 hover:underline">
+          Don&apos;t have an account?{" "}
+          <a href="/register" className="text-blue-600 hover:underline">
             Register
           </a>
         </p>

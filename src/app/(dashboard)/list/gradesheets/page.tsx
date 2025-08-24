@@ -2,10 +2,10 @@ import Pagination from "@/components/Pagination";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
-import Link from "next/link";
-import { resultsData, role } from "@/lib/data";
+import { gradesheetsData, role } from "@/lib/data";
+import FormModal from "@/components/FormModal";
 
-type Result = {
+type gradesheet = {
   id: number;
   subject: string;
   class: number;
@@ -51,8 +51,8 @@ const columns = [
   },
 ];
 
-const ResultsListPage = () => {
-  const renderRow = (item: Result) => (
+const GradesheetsListPage = () => {
+  const renderRow = (item: gradesheet) => (
     <tr
       key={item.id}
       className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
@@ -65,15 +65,11 @@ const ResultsListPage = () => {
       <td className="hidden md:table-cell">{item.date}</td>
       <td>
         <div className="flex items-center gap-4">
-          <Link href={`/list/teachers/${item.id}`}>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-[#C3EBFA] cursor-pointer">
-              <Image src="/edit.png" alt="" width={16} height={16}></Image>
-            </button>
-          </Link>
           {role === "admin" && (
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-[#CFCEFF] cursor-pointer">
-              <Image src="/delete.png" alt="" width={16} height={16}></Image>
-            </button>
+            <>
+              <FormModal table="gradesheet" type="update" data={item} />
+              <FormModal table="gradesheet" type="delete" id={item.id} />
+            </>
           )}
         </div>
       </td>
@@ -83,7 +79,9 @@ const ResultsListPage = () => {
     <div className="bg-white p-4 rounded-2xl flex-1 m-4 mt-0">
       {/*TOP*/}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Results</h1>
+        <h1 className="hidden md:block text-lg font-semibold">
+          All Gradesheets
+        </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
@@ -93,20 +91,20 @@ const ResultsListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-amber-200 cursor-pointer">
               <Image src="/sort.png" alt="filter" width={20} height={20} />
             </button>
-            {role === "admin" && (
-              <button className="w-8 h-8 flex items-center justify-center rounded-full bg-amber-200 cursor-pointer">
-                <Image src="/plus.png" alt="filter" width={20} height={20} />
-              </button>
-            )}
+            {role === "admin" && <FormModal table="gradesheet" type="create" />}
           </div>
         </div>
       </div>
       {/*List*/}
-      <ViewTable columns={columns} renderRow={renderRow} data={resultsData} />
+      <ViewTable
+        columns={columns}
+        renderRow={renderRow}
+        data={gradesheetsData}
+      />
       {/*Pagination*/}
       <Pagination />
     </div>
   );
 };
 
-export default ResultsListPage;
+export default GradesheetsListPage;

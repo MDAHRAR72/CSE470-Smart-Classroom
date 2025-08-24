@@ -4,6 +4,7 @@ import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
 import Link from "next/link";
 import { examsData, role } from "@/lib/data";
+import FormModal from "@/components/FormModal";
 
 type Exam = {
   id: number;
@@ -50,15 +51,11 @@ const ExamsListPage = () => {
       <td className="hidden md:table-cell">{item.date}</td>
       <td>
         <div className="flex items-center gap-4">
-          <Link href={`/list/teachers/${item.id}`}>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-[#C3EBFA] cursor-pointer">
-              <Image src="/edit.png" alt="" width={16} height={16}></Image>
-            </button>
-          </Link>
           {role === "admin" && (
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-[#CFCEFF] cursor-pointer">
-              <Image src="/delete.png" alt="" width={16} height={16}></Image>
-            </button>
+            <>
+              <FormModal table="exam" type="update" data={item} />
+              <FormModal table="exam" type="delete" id={item.id} />
+            </>
           )}
         </div>
       </td>
@@ -78,11 +75,7 @@ const ExamsListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-amber-200 cursor-pointer">
               <Image src="/sort.png" alt="filter" width={20} height={20} />
             </button>
-            {role === "admin" && (
-              <button className="w-8 h-8 flex items-center justify-center rounded-full bg-amber-200 cursor-pointer">
-                <Image src="/plus.png" alt="filter" width={20} height={20} />
-              </button>
-            )}
+            {role === "admin" && <FormModal table="exam" type="create" />}
           </div>
         </div>
       </div>

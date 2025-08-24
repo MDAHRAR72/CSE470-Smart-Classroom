@@ -4,6 +4,7 @@ import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
 import Link from "next/link";
 import { role, teachersData } from "@/lib/data";
+import FormModal from "@/components/FormModal";
 
 type Teacher = {
   id: number;
@@ -85,9 +86,7 @@ const TeachersListPage = () => {
             </button>
           </Link>
           {role === "admin" && (
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-[#CFCEFF] cursor-pointer">
-              <Image src="/delete.png" alt="" width={16} height={16}></Image>
-            </button>
+            <FormModal table="teacher" type="delete" id={item.id} />
           )}
         </div>
       </td>
@@ -107,11 +106,7 @@ const TeachersListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-amber-200 cursor-pointer">
               <Image src="/sort.png" alt="filter" width={20} height={20} />
             </button>
-            {role === "admin" && (
-              <button className="w-8 h-8 flex items-center justify-center rounded-full bg-amber-200 cursor-pointer">
-                <Image src="/plus.png" alt="filter" width={20} height={20} />
-              </button>
-            )}
+            {role === "admin" && <FormModal table="teacher" type="create" />}
           </div>
         </div>
       </div>

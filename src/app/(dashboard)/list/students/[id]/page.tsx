@@ -1,6 +1,8 @@
 import Announcements from "@/components/Announcements";
 import BigCalendar from "@/components/BigCalendar";
+import FormModal from "@/components/FormModal";
 import Performance from "@/components/Performance";
+import { role } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -13,7 +15,7 @@ const SingleStudentPage = () => {
         {/*Top*/}
         <div className="flex flex-col lg:flex-row gap-4">
           {/*User Info Card*/}
-          <div className="bg-blue-200 py-6 px-4 rounded-xl flex-1 flex gap-4">
+          <div className="bg-[#C3EBFA] py-6 px-4 rounded-xl flex-1 flex gap-4">
             <div className="w-1/3">
               <Image
                 src="https://images.pexels.com/photos/8147397/pexels-photo-8147397.jpeg?auto=compress&cs=tinysrgb&w=1200"
@@ -24,7 +26,29 @@ const SingleStudentPage = () => {
               ></Image>
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
-              <h1 className="text-xl font-semibold">Super Girl</h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-xl font-semibold">Dame Ungrrrr</h1>
+                {role === "admin" && (
+                  <FormModal
+                    table="teacher"
+                    type="update"
+                    data={{
+                      id: 1,
+                      username: "professor",
+                      email: "user@gmail.com",
+                      password: "asdfasdfsadf",
+                      firstName: "Dame",
+                      lastName: "Ungrrrr",
+                      phone: "+8801946464646",
+                      address: "12/13 Basha, Basha",
+                      bloodType: "A+",
+                      birthDate: "2000-01-01",
+                      sex: "female",
+                      img: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=1200",
+                    }}
+                  />
+                )}
+              </div>
               <p className="text-sm text-gray-500">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -40,7 +64,7 @@ const SingleStudentPage = () => {
                 </div>
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Image src="/date.png" alt="" width={14} height={14} />
-                  <span>August 2025</span>
+                  <span>January 2002</span>
                 </div>
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Image src="/phone.png" alt="" width={14} height={14} />
@@ -126,14 +150,14 @@ const SingleStudentPage = () => {
             <Link className="p-3 rounded-xl bg-purple-100" href="/">
               Student&apos;s Teachers
             </Link>
-            <Link className="p-3 rounded-xl bg-purple-100" href="/">
+            <Link className="p-3 rounded-xl bg-blue-100" href="/">
               Student&apos;s Exams
             </Link>
-            <Link className="p-3 rounded-xl bg-blue-100" href="/">
+            <Link className="p-3 rounded-xl bg-purple-100" href="/">
               Student&apos;s Assignments
             </Link>
             <Link className="p-3 rounded-xl bg-blue-100" href="/">
-              Student&apos;s Results
+              Student&apos;s Gradesheet
             </Link>
           </div>
         </div>

@@ -2,7 +2,6 @@ import Pagination from "@/components/Pagination";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
-import Link from "next/link";
 import { classesData, role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
 
@@ -11,7 +10,7 @@ type Classes = {
   name: string;
   capacity: number;
   grade: number;
-  teacher: string;
+  classTeacher: string;
 };
 
 const columns = [
@@ -30,8 +29,8 @@ const columns = [
     className: "hidden md:table-cell",
   },
   {
-    header: "Teacher",
-    accessor: "teacher",
+    header: "Class Teacher",
+    accessor: "classTeacher",
     className: "hidden md:table-cell",
   },
   {
@@ -49,7 +48,7 @@ const ClassesListPage = () => {
       <td className="flex items-center gap-4 p-4">{item.name}</td>
       <td className="hidden md:table-cell">{item.capacity}</td>
       <td className="hidden md:table-cell">{item.grade}</td>
-      <td className="hidden md:table-cell">{item.teacher}</td>
+      <td className="hidden md:table-cell">{item.classTeacher}</td>
       <td>
         <div className="flex items-center gap-4">
           {role === "admin" && (

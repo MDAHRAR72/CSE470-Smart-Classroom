@@ -1,12 +1,13 @@
-import Pagination from "@/components/Pagination";
+import PaginationBar from "@/components/PaginationBar";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
 import Link from "next/link";
-import { role, teachersData } from "@/lib/data";
+import { role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
 import { Class, Subject, Teacher } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { ITEM_PER_PAGE } from "@/lib/settings";
 
 type Teacherlist = Teacher & { subjects: Subject[] } & { classes: Class[] };
 
@@ -67,10 +68,10 @@ const renderRow = (item: Teacherlist) => (
     </td>
     <td className="hidden md:table-cell">{item.username}</td>
     <td className="hidden md:table-cell">
-      {item.subjects.map((subject) => subject.name).join(",")}
+      {item.subjects.map((subject) => subject.name).join(", ")}
     </td>
     <td className="hidden md:table-cell">
-      {item.classes.map((classItem) => classItem.name).join(",")}
+      {item.classes.map((classItem) => classItem.name).join(", ")}
     </td>
     <td className="hidden md:table-cell">{item.phone}</td>
     <td className="hidden md:table-cell">{item.address}</td>
@@ -88,15 +89,26 @@ const renderRow = (item: Teacherlist) => (
     </td>
   </tr>
 );
-const TeachersListPage = async () => {
-  const data = await prisma.teacher.findMany({
-    include: {
-      subjects: true,
-      classes: true,
-    },
-  });
+const TeachersListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { page, ...queryParams } = searchParams;
 
-  console.log(data);
+  const p = page ? parseInt(page) : 1;
+
+  const [data, count] = await prisma.$transaction([
+    prisma.teacher.findMany({
+      include: {
+        subjects: true,
+        classes: true,
+      },
+      take: ITEM_PER_PAGE,
+      skip: ITEM_PER_PAGE * (p - 1),
+    }),
+    prisma.teacher.count(),
+  ]);
 
   return (
     <div className="bg-white p-4 rounded-2xl flex-1 m-4 mt-0">
@@ -119,7 +131,7 @@ const TeachersListPage = async () => {
       {/*List*/}
       <ViewTable columns={columns} renderRow={renderRow} data={data} />
       {/*Pagination*/}
-      <Pagination />
+      <PaginationBar />
     </div>
   );
 };

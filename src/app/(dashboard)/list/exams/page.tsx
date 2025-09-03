@@ -1,10 +1,10 @@
-import Pagination from "@/components/Pagination";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
 import Link from "next/link";
 import { examsData, role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
+import PaginationBar from "@/components/PaginationBar";
 
 type Exam = {
   id: number;
@@ -82,7 +82,7 @@ const ExamsListPage = () => {
       {/*List*/}
       <ViewTable columns={columns} renderRow={renderRow} data={examsData} />
       {/*Pagination*/}
-      <Pagination />
+      <PaginationBar />
     </div>
   );
 };

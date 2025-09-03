@@ -1,4 +1,4 @@
-import Pagination from "@/components/Pagination";
+import PaginationBar from "@/components/PaginationBar";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
@@ -89,7 +89,7 @@ const EventsListPage = () => {
       {/*List*/}
       <ViewTable columns={columns} renderRow={renderRow} data={eventsData} />
       {/*Pagination*/}
-      <Pagination />
+      <PaginationBar />
     </div>
   );
 };

@@ -1,9 +1,9 @@
-import Pagination from "@/components/Pagination";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
 import { gradesheetsData, role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
+import PaginationBar from "@/components/PaginationBar";
 
 type gradesheet = {
   id: number;
@@ -102,7 +102,7 @@ const GradesheetsListPage = () => {
         data={gradesheetsData}
       />
       {/*Pagination*/}
-      <Pagination />
+      <PaginationBar />
     </div>
   );
 };

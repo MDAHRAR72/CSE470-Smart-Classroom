@@ -1,4 +1,4 @@
-import Pagination from "@/components/Pagination";
+import PaginationBar from "@/components/PaginationBar";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
@@ -82,7 +82,7 @@ const ClassesListPage = () => {
       {/*List*/}
       <ViewTable columns={columns} renderRow={renderRow} data={classesData} />
       {/*Pagination*/}
-      <Pagination />
+      <PaginationBar />
     </div>
   );
 };

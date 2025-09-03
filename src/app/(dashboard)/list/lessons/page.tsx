@@ -1,10 +1,10 @@
-import Pagination from "@/components/Pagination";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
 import Link from "next/link";
 import { lessonsData, role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
+import PaginationBar from "@/components/PaginationBar";
 
 type Lesson = {
   id: number;
@@ -75,7 +75,7 @@ const LessonsListPage = () => {
       {/*List*/}
       <ViewTable columns={columns} renderRow={renderRow} data={lessonsData} />
       {/*Pagination*/}
-      <Pagination />
+      <PaginationBar />
     </div>
   );
 };

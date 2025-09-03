@@ -1,10 +1,10 @@
-import Pagination from "@/components/Pagination";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
 import Link from "next/link";
 import { announcementsData, role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
+import PaginationBar from "@/components/PaginationBar";
 
 type Announcement = {
   id: number;
@@ -83,7 +83,7 @@ const AnnouncementsListPage = () => {
         data={announcementsData}
       />
       {/*Pagination*/}
-      <Pagination />
+      <PaginationBar />
     </div>
   );
 };

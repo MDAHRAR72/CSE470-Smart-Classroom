@@ -1,6 +1,8 @@
-import React from "react";
+"use client";
 
-const Pagination = () => {
+import { ITEM_PER_PAGE } from "@/lib/settings";
+
+const PaginationBar = ({ page, count }: { page: number; count: number }) => {
   return (
     <div className="p-4 flex items-center justify-between text-gray-500">
       <button
@@ -10,13 +12,8 @@ const Pagination = () => {
         Prev
       </button>
       <div className="flex items-center gap-2 text-sm">
-        <button className="px-2 rounded-sm bg-blue-100 cursor-pointer">
-          1
-        </button>
-        <button className="px-2 rounded-sm cursor-pointer">2</button>
-        <button className="px-2 rounded-sm cursor-pointer">3</button>
-        ...
-        <button className="px-2 rounded-sm cursor-pointer">10</button>
+        {/*Array.from{{length:Math.ceil(count / ITEM_PER_PAGE)}}*/}
+        <button className="px-2 rounded-sm bg-blue-100">1</button>
       </div>
       <button
         disabled
@@ -28,4 +25,4 @@ const Pagination = () => {
   );
 };
 
-export default Pagination;
+export default PaginationBar;

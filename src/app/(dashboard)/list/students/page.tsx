@@ -2,21 +2,14 @@ import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
 import Link from "next/link";
-import { role, studentsData } from "@/lib/data";
+import { role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
 import PaginationBar from "@/components/PaginationBar";
+import { Class, Prisma, Student } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { ITEM_PER_PAGE } from "@/lib/settings";
 
-type Student = {
-  id: number;
-  studentId: string;
-  name: string;
-  email?: string;
-  photo: string;
-  phone?: string;
-  grade: number;
-  class: string;
-  address: string;
-};
+type StudentList = Student & { class: Class };
 
 const columns = [
   {
@@ -48,26 +41,26 @@ const columns = [
     accessor: "action",
   },
 ];
-const renderRow = (item: Student) => (
+const renderRow = (item: StudentList) => (
   <tr
     key={item.id}
     className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
   >
     <td className="flex items-center gap-4 p-4">
       <Image
-        src={item.photo}
+        src={item.img || "/noAvatar.png"}
         alt=""
         width={40}
         height={40}
         className="md:hidden xl:block rounded-full object-cover"
       />
       <div className="flex flex-col">
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-xs text-gray-500">{item.class}</p>
+        <h3 className="font-semibold">{item.lastname}</h3>
+        <p className="text-xs text-gray-500">{item.class.name}</p>
       </div>
     </td>
-    <td className="hidden md:table-cell">{item.studentId}</td>
-    <td className="hidden md:table-cell">{item.grade}</td>
+    <td className="hidden md:table-cell">{item.username}</td>
+    <td className="hidden md:table-cell">{item.class.name}</td>
     <td className="hidden md:table-cell">{item.phone}</td>
     <td className="hidden md:table-cell">{item.address}</td>
     <td>
@@ -84,7 +77,53 @@ const renderRow = (item: Student) => (
     </td>
   </tr>
 );
-const StudentsListPage = async () => {
+
+const StudentsListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { page, ...queryParams } = searchParams;
+
+  const p = page ? parseInt(page) : 1;
+
+  const query: Prisma.StudentWhereInput = {};
+
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "teacherId":
+            query.class = {
+              lessons: {
+                some: {
+                  teacherId: value,
+                },
+              },
+            };
+            break;
+          case "search":
+            query.lastname = { contains: value, mode: "insensitive" };
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  const [studentsData, count] = await prisma.$transaction([
+    prisma.student.findMany({
+      where: query,
+      include: {
+        class: true,
+      },
+      take: ITEM_PER_PAGE,
+      skip: ITEM_PER_PAGE * (p - 1),
+    }),
+    prisma.student.count({ where: query }),
+  ]);
+
   return (
     <div className="bg-white p-4 rounded-2xl flex-1 m-4 mt-0">
       {/*TOP*/}
@@ -106,7 +145,7 @@ const StudentsListPage = async () => {
       {/*List*/}
       <ViewTable columns={columns} renderRow={renderRow} data={studentsData} />
       {/*Pagination*/}
-      <PaginationBar />
+      <PaginationBar page={p} count={count} />
     </div>
   );
 };

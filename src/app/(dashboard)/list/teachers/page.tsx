@@ -5,7 +5,7 @@ import ViewTable from "@/components/ViewTable";
 import Link from "next/link";
 import { role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
-import { Class, Subject, Teacher } from "@prisma/client";
+import { Class, Prisma, Subject, Teacher } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 
@@ -98,6 +98,29 @@ const TeachersListPage = async ({
 
   const p = page ? parseInt(page) : 1;
 
+  const query: Prisma.TeacherWhereInput = {};
+
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "classId":
+            query.lessons = {
+              some: {
+                classId: parseInt(value),
+              },
+            };
+            break;
+          case "search":
+            query.name = { contains: value, mode: "insensitive" };
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
   const [data, count] = await prisma.$transaction([
     prisma.teacher.findMany({
       include: {
@@ -131,7 +154,7 @@ const TeachersListPage = async ({
       {/*List*/}
       <ViewTable columns={columns} renderRow={renderRow} data={data} />
       {/*Pagination*/}
-      <PaginationBar />
+      <PaginationBar page={p} count={count} />
     </div>
   );
 };

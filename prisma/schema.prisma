@@ -31,7 +31,7 @@ model Student {
   gradeId     Int
   grade       Grade        @relation(fields: [gradeId], references: [id])
   attendances Attendance[]
-  gradesheet     Gradesheet[]
+  gradesheets     Gradesheet[]
   birthday    DateTime
 }
 

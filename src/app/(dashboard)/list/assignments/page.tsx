@@ -76,22 +76,44 @@ const AssignmentsListPage = async ({
 
   const query: Prisma.AssignmentWhereInput = {};
 
-  query.lesson = {};
-
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
         switch (key) {
           case "classId":
-            query.lesson.classId = parseInt(value);
+            query.lesson = {
+              classId: parseInt(value),
+            };
             break;
           case "teacherId":
-            query.lesson.teacherId = value;
+            query.lesson = {
+              teacherId: value,
+            };
             break;
           case "search":
-            query.lesson.subject = {
-              name: { contains: value, mode: "insensitive" },
-            };
+            query.OR = [
+              { title: { contains: value, mode: "insensitive" } },
+              {
+                lesson: {
+                  subject: { name: { contains: value, mode: "insensitive" } },
+                },
+              },
+              {
+                lesson: {
+                  class: { name: { contains: value, mode: "insensitive" } },
+                },
+              },
+              {
+                lesson: {
+                  teacher: {
+                    OR: [
+                      { firstname: { contains: value, mode: "insensitive" } },
+                      { lastname: { contains: value, mode: "insensitive" } },
+                    ],
+                  },
+                },
+              },
+            ];
             break;
           default:
             break;
@@ -139,13 +161,21 @@ const AssignmentsListPage = async ({
         </div>
       </div>
       {/*List*/}
-      <ViewTable
-        columns={columns}
-        renderRow={renderRow}
-        data={assignmentsData}
-      />
-      {/*Pagination*/}
-      <PaginationBar page={p} count={count} />
+      {assignmentsData.length > 0 ? (
+        <>
+          <ViewTable
+            columns={columns}
+            renderRow={renderRow}
+            data={assignmentsData}
+          />
+          {/*Pagination*/}
+          <PaginationBar page={p} count={count} />
+        </>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          <p>No assignments found matching your search criteria.</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -112,7 +112,12 @@ const TeachersListPage = async ({
             };
             break;
           case "search":
-            query.lastname = { contains: value, mode: "insensitive" };
+            query.OR = [
+              { firstname: { contains: value, mode: "insensitive" } },
+              { lastname: { contains: value, mode: "insensitive" } },
+              { username: { contains: value, mode: "insensitive" } },
+              { email: { contains: value, mode: "insensitive" } },
+            ];
             break;
           default:
             break;
@@ -123,6 +128,7 @@ const TeachersListPage = async ({
 
   const [data, count] = await prisma.$transaction([
     prisma.teacher.findMany({
+      where: query,
       include: {
         subjects: true,
         classes: true,
@@ -130,7 +136,7 @@ const TeachersListPage = async ({
       take: ITEM_PER_PAGE,
       skip: ITEM_PER_PAGE * (p - 1),
     }),
-    prisma.teacher.count(),
+    prisma.teacher.count({ where: query }),
   ]);
 
   return (
@@ -152,9 +158,17 @@ const TeachersListPage = async ({
         </div>
       </div>
       {/*List*/}
-      <ViewTable columns={columns} renderRow={renderRow} data={data} />
-      {/*Pagination*/}
-      <PaginationBar page={p} count={count} />
+      {data.length > 0 ? (
+        <>
+          <ViewTable columns={columns} renderRow={renderRow} data={data} />
+          {/*Pagination*/}
+          <PaginationBar page={p} count={count} />
+        </>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          <p>No teachers found matching your search criteria.</p>
+        </div>
+      )}
     </div>
   );
 };

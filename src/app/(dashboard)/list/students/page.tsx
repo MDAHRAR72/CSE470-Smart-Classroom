@@ -55,7 +55,7 @@ const renderRow = (item: StudentList) => (
         className="md:hidden xl:block rounded-full object-cover"
       />
       <div className="flex flex-col">
-        <h3 className="font-semibold">{item.lastname}</h3>
+        <h3 className="font-semibold">{item.firstname} {item.lastname}</h3>
         <p className="text-xs text-gray-500">{item.class.name}</p>
       </div>
     </td>
@@ -103,7 +103,12 @@ const StudentsListPage = async ({
             };
             break;
           case "search":
-            query.lastname = { contains: value, mode: "insensitive" };
+            query.OR = [
+              { firstname: { contains: value, mode: "insensitive" } },
+              { lastname: { contains: value, mode: "insensitive" } },
+              { username: { contains: value, mode: "insensitive" } },
+              { email: { contains: value, mode: "insensitive" } },
+            ];
             break;
           default:
             break;
@@ -143,9 +148,17 @@ const StudentsListPage = async ({
         </div>
       </div>
       {/*List*/}
-      <ViewTable columns={columns} renderRow={renderRow} data={studentsData} />
-      {/*Pagination*/}
-      <PaginationBar page={p} count={count} />
+      {studentsData.length > 0 ? (
+        <>
+          <ViewTable columns={columns} renderRow={renderRow} data={studentsData} />
+          {/*Pagination*/}
+          <PaginationBar page={p} count={count} />
+        </>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          <p>No students found matching your search criteria.</p>
+        </div>
+      )}
     </div>
   );
 };

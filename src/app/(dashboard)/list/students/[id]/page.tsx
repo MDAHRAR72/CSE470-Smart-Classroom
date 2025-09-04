@@ -3,11 +3,39 @@ import BigCalendar from "@/components/BigCalendar";
 import FormModal from "@/components/FormModal";
 import Performance from "@/components/Performance";
 import { role } from "@/lib/data";
+import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { notFound } from "next/navigation";
 
-const SingleStudentPage = () => {
+const SingleStudentPage = async ({ params }: { params: { id: string } }) => {
+  const student = await prisma.student.findUnique({
+    where: { id: params.id },
+    include: {
+      class: {
+        include: {
+          lessons: {
+            include: {
+              subject: true,
+              teacher: true,
+            },
+          },
+        },
+      },
+      grade: true,
+      gradesheet: {
+        include: {
+          exam: true,
+          assignment: true,
+        },
+      },
+    },
+  });
+
+  if (!student) {
+    notFound();
+  }
   return (
     <div className="flex-1 p-4 flex flex-col gap-4 xl:flex-row">
       {/*Left*/}
@@ -18,8 +46,8 @@ const SingleStudentPage = () => {
           <div className="bg-[#C3EBFA] py-6 px-4 rounded-xl flex-1 flex gap-4">
             <div className="w-1/3">
               <Image
-                src="https://images.pexels.com/photos/8147397/pexels-photo-8147397.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                alt=""
+                src={student.img || "/noAvatar.png"}
+                alt={`${student.firstname} ${student.lastname}`}
                 width={144}
                 height={144}
                 className="w-36 h-36 rounded-full object-cover"
@@ -27,24 +55,25 @@ const SingleStudentPage = () => {
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
               <div className="flex items-center gap-4">
-                <h1 className="text-xl font-semibold">Dame Ungrrrr</h1>
+                <h1 className="text-xl font-semibold">
+                  {student.firstname} {student.lastname}
+                </h1>
                 {role === "admin" && (
                   <FormModal
-                    table="teacher"
+                    table="student"
                     type="update"
                     data={{
-                      id: 1,
-                      username: "dameungrrrr",
-                      email: "user@gmail.com",
-                      password: "asdfasdfsadf",
-                      firstName: "Dame",
-                      lastName: "Ungrrrr",
-                      phone: "+8801946464646",
-                      address: "12/13 Basha, Basha",
-                      bloodType: "A+",
-                      birthDate: "2000-01-01",
-                      sex: "female",
-                      img: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=1200",
+                      id: student.id,
+                      username: student.username,
+                      email: student.email,
+                      firstName: student.firstname,
+                      lastName: student.lastname,
+                      phone: student.phone,
+                      address: student.address,
+                      bloodType: student.bloodType,
+                      birthDate: student.birthday.toISOString().split('T')[0],
+                      sex: student.sex.toLowerCase(),
+                      img: student.img,
                     }}
                   />
                 )}
@@ -56,19 +85,19 @@ const SingleStudentPage = () => {
               <div className="flex items-center gap-4 flex-wrap text-xs font-medium">
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Image src="/blood.png" alt="" width={14} height={14} />
-                  <span>A+</span>
+                  <span>{student.bloodType}</span>
                 </div>
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Image src="/mail.png" alt="" width={14} height={14} />
-                  <span>user@gmail.com</span>
+                  <span>{student.email || "No email"}</span>
                 </div>
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Image src="/date.png" alt="" width={14} height={14} />
-                  <span>January 2002</span>
+                  <span>{student.birthday.toLocaleDateString()}</span>
                 </div>
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Image src="/phone.png" alt="" width={14} height={14} />
-                  <span className="text-xs">+8801946464646</span>
+                  <span className="text-xs">{student.phone || "No phone"}</span>
                 </div>
               </div>
             </div>
@@ -99,7 +128,7 @@ const SingleStudentPage = () => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">10th</h1>
+                <h1 className="text-xl font-semibold">{student.grade.level}</h1>
                 <span className="text-sm text-gray-500">Grade</span>
               </div>
             </div>
@@ -113,7 +142,7 @@ const SingleStudentPage = () => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">15</h1>
+                <h1 className="text-xl font-semibold">{student.class.lessons.length}</h1>
                 <span className="text-sm text-gray-500">Lessons</span>
               </div>
             </div>
@@ -127,7 +156,7 @@ const SingleStudentPage = () => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">10B</h1>
+                <h1 className="text-xl font-semibold">{student.class.name}</h1>
                 <span className="text-sm text-gray-500">Class</span>
               </div>
             </div>
@@ -146,31 +175,31 @@ const SingleStudentPage = () => {
           <div className="mt-4 flex gap-4 flex-wrap text-xs text-gray-500">
             <Link
               className="p-3 rounded-xl bg-blue-100"
-              href={`/list/lessons?classId=${"student1"}`}
+              href={`/list/lessons?classId=${student.classId}`}
             >
               Student&apos;s Lessons
             </Link>
             <Link
               className="p-3 rounded-xl bg-purple-100"
-              href={`/list/teachers?classId=${"student1"}`}
+              href={`/list/teachers?classId=${student.classId}`}
             >
               Student&apos;s Teachers
             </Link>
             <Link
               className="p-3 rounded-xl bg-blue-100"
-              href={`/list/exams?classId=${"student1"}`}
+              href={`/list/exams?classId=${student.classId}`}
             >
               Student&apos;s Exams
             </Link>
             <Link
               className="p-3 rounded-xl bg-purple-100"
-              href={`/list/assignments?classId=${"student1"}`}
+              href={`/list/assignments?classId=${student.classId}`}
             >
               Student&apos;s Assignments
             </Link>
             <Link
               className="p-3 rounded-xl bg-blue-100"
-              href={`/list/gradesheets?studentId=${"student1"}`}
+              href={`/list/gradesheets?studentId=${student.id}`}
             >
               Student&apos;s Gradesheet
             </Link>

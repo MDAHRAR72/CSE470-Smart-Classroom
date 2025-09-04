@@ -1,19 +1,50 @@
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
-import { gradesheetsData, role } from "@/lib/data";
+import { role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
 import PaginationBar from "@/components/PaginationBar";
+import { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { ITEM_PER_PAGE } from "@/lib/settings";
 
-type gradesheet = {
+type GradesheetList = {
   id: number;
-  subject: string;
-  class: number;
-  teacher: string;
-  student: string;
-  date: string;
-  type: "exam" | "assignment";
   score: number;
+  student: {
+    id: string;
+    firstname: string;
+    lastname: string;
+    class: {
+      name: string;
+    };
+  };
+  exam?: {
+    id: number;
+    title: string;
+    lesson: {
+      subject: {
+        name: string;
+      };
+      teacher: {
+        firstname: string;
+        lastname: string;
+      };
+    };
+  };
+  assignment?: {
+    id: number;
+    title: string;
+    lesson: {
+      subject: {
+        name: string;
+      };
+      teacher: {
+        firstname: string;
+        lastname: string;
+      };
+    };
+  };
 };
 
 const columns = [
@@ -41,8 +72,8 @@ const columns = [
     className: "hidden md:table-cell",
   },
   {
-    header: "Date",
-    accessor: "Date",
+    header: "Type",
+    accessor: "type",
     className: "hidden md:table-cell",
   },
   {
@@ -51,18 +82,24 @@ const columns = [
   },
 ];
 
-const GradesheetsListPage = () => {
-  const renderRow = (item: gradesheet) => (
+const renderRow = (item: GradesheetList) => {
+  const subject = item.exam?.lesson.subject.name || item.assignment?.lesson.subject.name || "Unknown";
+  const teacher = item.exam?.lesson.teacher || item.assignment?.lesson.teacher;
+  const type = item.exam ? "Exam" : "Assignment";
+
+  return (
     <tr
       key={item.id}
       className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
     >
-      <td className="flex items-center gap-4 p-4">{item.subject}</td>
-      <td>{item.student}</td>
+      <td className="flex items-center gap-4 p-4">{subject}</td>
+      <td>{item.student.firstname} {item.student.lastname}</td>
       <td className="hidden md:table-cell">{item.score}</td>
-      <td className="hidden md:table-cell">{item.teacher}</td>
-      <td className="hidden md:table-cell">{item.class}</td>
-      <td className="hidden md:table-cell">{item.date}</td>
+      <td className="hidden md:table-cell">
+        {teacher ? `${teacher.firstname} ${teacher.lastname}` : "Unknown"}
+      </td>
+      <td className="hidden md:table-cell">{item.student.class.name}</td>
+      <td className="hidden md:table-cell">{type}</td>
       <td>
         <div className="flex items-center gap-4">
           {role === "admin" && (
@@ -75,6 +112,119 @@ const GradesheetsListPage = () => {
       </td>
     </tr>
   );
+};
+
+const GradesheetsListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { page, ...queryParams } = searchParams;
+
+  const p = page ? parseInt(page) : 1;
+
+  const query: Prisma.GradesheetWhereInput = {};
+
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "studentId":
+            query.studentId = value;
+            break;
+          case "search":
+            query.OR = [
+              {
+                student: {
+                  OR: [
+                    { firstname: { contains: value, mode: "insensitive" } },
+                    { lastname: { contains: value, mode: "insensitive" } },
+                  ],
+                },
+              },
+              {
+                exam: {
+                  lesson: {
+                    subject: { name: { contains: value, mode: "insensitive" } },
+                  },
+                },
+              },
+              {
+                assignment: {
+                  lesson: {
+                    subject: { name: { contains: value, mode: "insensitive" } },
+                  },
+                },
+              },
+              {
+                exam: {
+                  lesson: {
+                    teacher: {
+                      OR: [
+                        { firstname: { contains: value, mode: "insensitive" } },
+                        { lastname: { contains: value, mode: "insensitive" } },
+                      ],
+                    },
+                  },
+                },
+              },
+              {
+                assignment: {
+                  lesson: {
+                    teacher: {
+                      OR: [
+                        { firstname: { contains: value, mode: "insensitive" } },
+                        { lastname: { contains: value, mode: "insensitive" } },
+                      ],
+                    },
+                  },
+                },
+              },
+            ];
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  const [gradesheetsData, count] = await prisma.$transaction([
+    prisma.gradesheet.findMany({
+      where: query,
+      include: {
+        student: {
+          include: {
+            class: true,
+          },
+        },
+        exam: {
+          include: {
+            lesson: {
+              include: {
+                subject: true,
+                teacher: true,
+              },
+            },
+          },
+        },
+        assignment: {
+          include: {
+            lesson: {
+              include: {
+                subject: true,
+                teacher: true,
+              },
+            },
+          },
+        },
+      },
+      take: ITEM_PER_PAGE,
+      skip: ITEM_PER_PAGE * (p - 1),
+    }),
+    prisma.gradesheet.count({ where: query }),
+  ]);
+
   return (
     <div className="bg-white p-4 rounded-2xl flex-1 m-4 mt-0">
       {/*TOP*/}
@@ -96,13 +246,21 @@ const GradesheetsListPage = () => {
         </div>
       </div>
       {/*List*/}
-      <ViewTable
-        columns={columns}
-        renderRow={renderRow}
-        data={gradesheetsData}
-      />
-      {/*Pagination*/}
-      <PaginationBar />
+      {gradesheetsData.length > 0 ? (
+        <>
+          <ViewTable
+            columns={columns}
+            renderRow={renderRow}
+            data={gradesheetsData}
+          />
+          {/*Pagination*/}
+          <PaginationBar page={p} count={count} />
+        </>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          <p>No gradesheets found matching your search criteria.</p>
+        </div>
+      )}
     </div>
   );
 };

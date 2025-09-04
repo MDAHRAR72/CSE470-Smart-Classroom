@@ -77,7 +77,17 @@ const ClassesListPage = async ({
             query.classTeacherId = value;
             break;
           case "search":
-            query.name = { contains: value, mode: "insensitive" };
+            query.OR = [
+              { name: { contains: value, mode: "insensitive" } },
+              {
+                classTeacher: {
+                  OR: [
+                    { firstname: { contains: value, mode: "insensitive" } },
+                    { lastname: { contains: value, mode: "insensitive" } },
+                  ],
+                },
+              },
+            ];
             break;
           default:
             break;
@@ -116,9 +126,17 @@ const ClassesListPage = async ({
         </div>
       </div>
       {/*List*/}
-      <ViewTable columns={columns} renderRow={renderRow} data={classesData} />
-      {/*Pagination*/}
-      <PaginationBar page={p} count={count} />
+      {classesData.length > 0 ? (
+        <>
+          <ViewTable columns={columns} renderRow={renderRow} data={classesData} />
+          {/*Pagination*/}
+          <PaginationBar page={p} count={count} />
+        </>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          <p>No classes found matching your search criteria.</p>
+        </div>
+      )}
     </div>
   );
 };

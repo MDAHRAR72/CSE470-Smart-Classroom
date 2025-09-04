@@ -126,9 +126,17 @@ const LessonsListPage = async ({
         </div>
       </div>
       {/*List*/}
-      <ViewTable columns={columns} renderRow={renderRow} data={lessonsData} />
-      {/*Pagination*/}
-      <PaginationBar page={p} count={count} />
+      {lessonsData.length > 0 ? (
+        <>
+          <ViewTable columns={columns} renderRow={renderRow} data={lessonsData} />
+          {/*Pagination*/}
+          <PaginationBar page={p} count={count} />
+        </>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          <p>No lessons found matching your search criteria.</p>
+        </div>
+      )}
     </div>
   );
 };

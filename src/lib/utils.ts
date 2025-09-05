@@ -1,6 +1,6 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { auth } from "@clerk/nextjs/server";
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+export async function Role() {
+  const { sessionClaims } = await auth();
+  return (sessionClaims?.metadata as { role?: string })?.role ?? "user";
 }

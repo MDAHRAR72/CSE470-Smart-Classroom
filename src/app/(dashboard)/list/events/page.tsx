@@ -2,11 +2,11 @@ import PaginationBar from "@/components/PaginationBar";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
-import { role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { Role } from "@/lib/utils";
 
 type EventList = {
   id: number;
@@ -20,77 +20,14 @@ type EventList = {
   } | null;
 };
 
-const columns = [
-  {
-    header: "Title",
-    accessor: "title",
-  },
-  {
-    header: "Class",
-    accessor: "class",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Date",
-    accessor: "date",
-  },
-  {
-    header: "Start Time",
-    accessor: "startTime",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "End Time",
-    accessor: "endTime",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
-];
-
-const renderRow = (item: EventList) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
-  >
-    <td className="flex items-center gap-4 p-4">{item.title}</td>
-    <td className="hidden md:table-cell">
-      {item.class?.name || "All Classes"}
-    </td>
-    <td>{new Intl.DateTimeFormat("en-US").format(item.startTime)}</td>
-    <td className="hidden md:table-cell">
-      {new Intl.DateTimeFormat("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }).format(item.startTime)}
-    </td>
-    <td className="hidden md:table-cell">
-      {new Intl.DateTimeFormat("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }).format(item.endTime)}
-    </td>
-    <td>
-      <div className="flex items-center gap-4">
-        {role === "admin" && (
-          <>
-            <FormModal table="event" type="update" data={item} />
-            <FormModal table="event" type="delete" id={item.id} />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
-
 const EventsListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  const { page, ...queryParams } = searchParams;
+  const role = await Role();
+  const params = await searchParams;
+  const { page, ...queryParams } = params;
 
   const p = page ? parseInt(page) : 1;
 
@@ -135,6 +72,71 @@ const EventsListPage = async ({
     }),
     prisma.event.count({ where: query }),
   ]);
+
+  const columns = [
+    {
+      header: "Title",
+      accessor: "title",
+    },
+    {
+      header: "Class",
+      accessor: "class",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Date",
+      accessor: "date",
+    },
+    {
+      header: "Start Time",
+      accessor: "startTime",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "End Time",
+      accessor: "endTime",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Actions",
+      accessor: "action",
+    },
+  ];
+
+  const renderRow = (item: EventList) => (
+    <tr
+      key={item.id}
+      className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
+    >
+      <td className="flex items-center gap-4 p-4">{item.title}</td>
+      <td className="hidden md:table-cell">
+        {item.class?.name || "All Classes"}
+      </td>
+      <td>{new Intl.DateTimeFormat("en-US").format(item.startTime)}</td>
+      <td className="hidden md:table-cell">
+        {new Intl.DateTimeFormat("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(item.startTime)}
+      </td>
+      <td className="hidden md:table-cell">
+        {new Intl.DateTimeFormat("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(item.endTime)}
+      </td>
+      <td>
+        <div className="flex items-center gap-4">
+          {(role === "admin" || role === "teacher") && (
+            <>
+              <FormModal table="event" type="update" data={item} />
+              <FormModal table="event" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
 
   return (
     <div className="bg-white p-4 rounded-2xl flex-1 m-4 mt-0">

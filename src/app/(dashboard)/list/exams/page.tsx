@@ -1,12 +1,12 @@
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
-import { role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
 import PaginationBar from "@/components/PaginationBar";
 import { Class, Exam, Prisma, Subject, Teacher } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { Role } from "@/lib/utils";
 
 type ExamList = Exam & {
   lesson: {
@@ -16,63 +16,14 @@ type ExamList = Exam & {
   };
 };
 
-const columns = [
-  {
-    header: "Subject Name",
-    accessor: "name",
-  },
-  {
-    header: "Class",
-    accessor: "class",
-  },
-  {
-    header: "Teacher",
-    accessor: "teacher",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Date",
-    accessor: "date",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
-];
-
-const renderRow = (item: ExamList) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
-  >
-    <td className="flex items-center gap-4 p-4">{item.lesson.subject.name}</td>
-    <td className="">{item.lesson.class.name}</td>
-    <td className="hidden md:table-cell">
-      {item.lesson.teacher.firstname + " " + item.lesson.teacher.lastname}
-    </td>
-    <td className="hidden md:table-cell">
-      {new Intl.DateTimeFormat("en-US").format(item.startTime)}
-    </td>
-    <td>
-      <div className="flex items-center gap-4">
-        {role === "admin" && (
-          <>
-            <FormModal table="exam" type="update" data={item} />
-            <FormModal table="exam" type="delete" id={item.id} />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
-
 const ExamsListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  const { page, ...queryParams } = searchParams;
+  const role = await Role();
+  const params = await searchParams;
+  const { page, ...queryParams } = params;
 
   const p = page ? parseInt(page) : 1;
 
@@ -141,6 +92,59 @@ const ExamsListPage = async ({
     }),
     prisma.exam.count({ where: query }),
   ]);
+
+  const columns = [
+    {
+      header: "Subject Name",
+      accessor: "name",
+    },
+    {
+      header: "Class",
+      accessor: "class",
+    },
+    {
+      header: "Teacher",
+      accessor: "teacher",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Date",
+      accessor: "date",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Actions",
+      accessor: "action",
+    },
+  ];
+
+  const renderRow = (item: ExamList) => (
+    <tr
+      key={item.id}
+      className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
+    >
+      <td className="flex items-center gap-4 p-4">
+        {item.lesson.subject.name}
+      </td>
+      <td className="">{item.lesson.class.name}</td>
+      <td className="hidden md:table-cell">
+        {item.lesson.teacher.firstname + " " + item.lesson.teacher.lastname}
+      </td>
+      <td className="hidden md:table-cell">
+        {new Intl.DateTimeFormat("en-US").format(item.startTime)}
+      </td>
+      <td>
+        <div className="flex items-center gap-4">
+          {(role === "admin" || role === "teacher") && (
+            <>
+              <FormModal table="exam" type="update" data={item} />
+              <FormModal table="exam" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
 
   return (
     <div className="bg-white p-4 rounded-2xl flex-1 m-4 mt-0">

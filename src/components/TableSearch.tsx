@@ -38,7 +38,7 @@ const TableSearch = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full md:w-auto flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-gray-300 px-2"
+      className="w-full md:w-auto flex items-center gap-2 text-xs rounded-2xl ring-[1.5px] ring-gray-300 px-2"
     >
       <Image src="/search.png" alt="" width={20} height={20} />
       <input

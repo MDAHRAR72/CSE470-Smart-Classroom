@@ -2,69 +2,22 @@ import PaginationBar from "@/components/PaginationBar";
 import TableSearch from "@/components/TableSearch";
 import Image from "next/image";
 import ViewTable from "@/components/ViewTable";
-import { role } from "@/lib/data";
 import FormModal from "@/components/FormModal";
 import { Class, Prisma, Teacher } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { Role } from "@/lib/utils";
 
 type ClassList = Class & { classTeacher: Teacher };
 
-const columns = [
-  {
-    header: "Class Name",
-    accessor: "name",
-  },
-  {
-    header: "Capacity",
-    accessor: "capacity",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Grade",
-    accessor: "grade",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Class Teacher",
-    accessor: "classTeacher",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
-];
-const renderRow = (item: ClassList) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
-  >
-    <td className="flex items-center gap-4 p-4">{item.name}</td>
-    <td className="hidden md:table-cell">{item.capacity}</td>
-    <td className="hidden md:table-cell">{item.name[0]}</td>
-    <td className="hidden md:table-cell">
-      {item.classTeacher.firstname + " " + item.classTeacher.lastname}
-    </td>
-    <td>
-      <div className="flex items-center gap-4">
-        {role === "admin" && (
-          <>
-            <FormModal table="class" type="update" data={item} />
-            <FormModal table="class" type="delete" id={item.id} />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
 const ClassesListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  const { page, ...queryParams } = searchParams;
-
+  const role = await Role();
+  const params = await searchParams;
+  const { page, ...queryParams } = params;
   const p = page ? parseInt(page) : 1;
 
   const query: Prisma.ClassWhereInput = {};
@@ -107,6 +60,54 @@ const ClassesListPage = async ({
     }),
     prisma.class.count({ where: query }),
   ]);
+
+  const columns = [
+    {
+      header: "Class Name",
+      accessor: "name",
+    },
+    {
+      header: "Capacity",
+      accessor: "capacity",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Grade",
+      accessor: "grade",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Class Teacher",
+      accessor: "classTeacher",
+      className: "hidden md:table-cell",
+    },
+    ...(role === "admin" ? [{ header: "Actions", accessor: "action" }] : []),
+  ];
+
+  const renderRow = (item: ClassList) => (
+    <tr
+      key={item.id}
+      className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
+    >
+      <td className="flex items-center gap-4 p-4">{item.name}</td>
+      <td className="hidden md:table-cell">{item.capacity}</td>
+      <td className="hidden md:table-cell">{item.name[0]}</td>
+      <td className="hidden md:table-cell">
+        {item.classTeacher.firstname + " " + item.classTeacher.lastname}
+      </td>
+      <td>
+        <div className="flex items-center gap-4">
+          {role === "admin" && (
+            <>
+              <FormModal table="class" type="update" data={item} />
+              <FormModal table="class" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
+
   return (
     <div className="bg-white p-4 rounded-2xl flex-1 m-4 mt-0">
       {/*TOP*/}
@@ -128,7 +129,11 @@ const ClassesListPage = async ({
       {/*List*/}
       {classesData.length > 0 ? (
         <>
-          <ViewTable columns={columns} renderRow={renderRow} data={classesData} />
+          <ViewTable
+            columns={columns}
+            renderRow={renderRow}
+            data={classesData}
+          />
           {/*Pagination*/}
           <PaginationBar page={p} count={count} />
         </>

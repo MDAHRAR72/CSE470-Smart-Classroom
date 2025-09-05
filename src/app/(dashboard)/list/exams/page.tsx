@@ -17,8 +17,14 @@ type ExamList = Exam & {
 };
 
 const columns = [
-  { header: "Subject Name", accessor: "name" },
-  { header: "Class", accessor: "class" },
+  {
+    header: "Subject Name",
+    accessor: "name",
+  },
+  {
+    header: "Class",
+    accessor: "class",
+  },
   {
     header: "Teacher",
     accessor: "teacher",
@@ -29,7 +35,10 @@ const columns = [
     accessor: "date",
     className: "hidden md:table-cell",
   },
-  { header: "Actions", accessor: "action" },
+  {
+    header: "Actions",
+    accessor: "action",
+  },
 ];
 
 const renderRow = (item: ExamList) => (
@@ -38,7 +47,7 @@ const renderRow = (item: ExamList) => (
     className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
   >
     <td className="flex items-center gap-4 p-4">{item.lesson.subject.name}</td>
-    <td>{item.lesson.class.name}</td>
+    <td className="">{item.lesson.class.name}</td>
     <td className="hidden md:table-cell">
       {item.lesson.teacher.firstname + " " + item.lesson.teacher.lastname}
     </td>
@@ -61,10 +70,9 @@ const renderRow = (item: ExamList) => (
 const ExamsListPage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | undefined }>;
+  searchParams: { [key: string]: string | undefined };
 }) => {
-  const resolvedSearchParams = await searchParams;
-  const { page, ...queryParams } = resolvedSearchParams;
+  const { page, ...queryParams } = searchParams;
 
   const p = page ? parseInt(page) : 1;
 
@@ -75,10 +83,14 @@ const ExamsListPage = async ({
       if (value !== undefined) {
         switch (key) {
           case "classId":
-            query.lesson = { classId: parseInt(value) };
+            query.lesson = {
+              classId: parseInt(value),
+            };
             break;
           case "teacherId":
-            query.lesson = { teacherId: value };
+            query.lesson = {
+              teacherId: value,
+            };
             break;
           case "search":
             query.OR = [
@@ -132,7 +144,7 @@ const ExamsListPage = async ({
 
   return (
     <div className="bg-white p-4 rounded-2xl flex-1 m-4 mt-0">
-      {/* TOP */}
+      {/*TOP*/}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Exams</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
@@ -142,18 +154,17 @@ const ExamsListPage = async ({
               <Image src="/filter.png" alt="filter" width={20} height={20} />
             </button>
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-amber-200 cursor-pointer">
-              <Image src="/sort.png" alt="sort" width={20} height={20} />
+              <Image src="/sort.png" alt="filter" width={20} height={20} />
             </button>
             {role === "admin" && <FormModal table="exam" type="create" />}
           </div>
         </div>
       </div>
-
-      {/* LIST */}
+      {/*List*/}
       {examsData.length > 0 ? (
         <>
           <ViewTable columns={columns} renderRow={renderRow} data={examsData} />
-          {/* Pagination */}
+          {/*Pagination*/}
           <PaginationBar page={p} count={count} />
         </>
       ) : (

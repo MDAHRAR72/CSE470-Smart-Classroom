@@ -68,10 +68,9 @@ const renderRow = (item: AssignmentList) => (
 const AssignmentsListPage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | undefined }>;
+  searchParams: { [key: string]: string | undefined };
 }) => {
-  const resolvedSearchParams = await searchParams;
-  const { page, ...queryParams } = resolvedSearchParams;
+  const { page, ...queryParams } = searchParams;
 
   const p = page ? parseInt(page) : 1;
 

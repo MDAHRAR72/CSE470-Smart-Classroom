@@ -83,10 +83,7 @@ const columns = [
 ];
 
 const renderRow = (item: GradesheetList) => {
-  const subject =
-    item.exam?.lesson.subject.name ||
-    item.assignment?.lesson.subject.name ||
-    "Unknown";
+  const subject = item.exam?.lesson.subject.name || item.assignment?.lesson.subject.name || "Unknown";
   const teacher = item.exam?.lesson.teacher || item.assignment?.lesson.teacher;
   const type = item.exam ? "Exam" : "Assignment";
 
@@ -96,9 +93,7 @@ const renderRow = (item: GradesheetList) => {
       className="border-b border-b-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
     >
       <td className="flex items-center gap-4 p-4">{subject}</td>
-      <td>
-        {item.student.firstname} {item.student.lastname}
-      </td>
+      <td>{item.student.firstname} {item.student.lastname}</td>
       <td className="hidden md:table-cell">{item.score}</td>
       <td className="hidden md:table-cell">
         {teacher ? `${teacher.firstname} ${teacher.lastname}` : "Unknown"}
@@ -122,10 +117,9 @@ const renderRow = (item: GradesheetList) => {
 const GradesheetsListPage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | undefined }>;
+  searchParams: { [key: string]: string | undefined };
 }) => {
-  const resolvedSearchParams = await searchParams;
-  const { page, ...queryParams } = resolvedSearchParams;
+  const { page, ...queryParams } = searchParams;
 
   const p = page ? parseInt(page) : 1;
 

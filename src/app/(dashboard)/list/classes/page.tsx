@@ -61,9 +61,10 @@ const renderRow = (item: ClassList) => (
 const ClassesListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  const { page, ...queryParams } = searchParams;
+  const resolvedSearchParams = await searchParams;
+  const { page, ...queryParams } = resolvedSearchParams;
 
   const p = page ? parseInt(page) : 1;
 
@@ -128,7 +129,11 @@ const ClassesListPage = async ({
       {/*List*/}
       {classesData.length > 0 ? (
         <>
-          <ViewTable columns={columns} renderRow={renderRow} data={classesData} />
+          <ViewTable
+            columns={columns}
+            renderRow={renderRow}
+            data={classesData}
+          />
           {/*Pagination*/}
           <PaginationBar page={p} count={count} />
         </>

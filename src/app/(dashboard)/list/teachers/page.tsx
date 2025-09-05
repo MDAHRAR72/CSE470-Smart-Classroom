@@ -89,12 +89,14 @@ const renderRow = (item: Teacherlist) => (
     </td>
   </tr>
 );
+
 const TeachersListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  const { page, ...queryParams } = searchParams;
+  const resolvedSearchParams = await searchParams;
+  const { page, ...queryParams } = resolvedSearchParams;
 
   const p = page ? parseInt(page) : 1;
 

@@ -26,12 +26,6 @@ const menuItems = [
         visible: ["admin", "teacher"],
       },
       {
-        icon: "/teacher.png",
-        label: "teachers",
-        href: "/list/teachers",
-        visible: ["admin", "teacher"],
-      },
-      {
         icon: "/subject.png",
         label: "Subjects",
         href: "/list/subjects",

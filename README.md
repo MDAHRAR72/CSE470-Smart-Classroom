@@ -18,3 +18,7 @@ Smart Classroom Manager
 8. Maintain course schedules.
 9. Visual overview of students, classes, and courses.
 10. Statistics on enrollment, attendance, or performance.
+
+
+Y- #FFE082
+B- #2196F3

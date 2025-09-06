@@ -2,7 +2,7 @@ import { Day, PrismaClient, UserSex } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Insert Amin
+  // Insert Admin
   await prisma.admin.create({
     data: {
       id: "admin1",
@@ -152,16 +152,40 @@ async function main() {
     });
   }
 
-  // Insert Attendance
-  for (let i = 1; i <= 10; i++) {
-    await prisma.attendance.create({
-      data: {
-        date: new Date(),
-        present: true,
-        studentId: `student${i}`,
-        lessonId: (i % 30) + 1,
-      },
-    });
+  // Insert Attendance (10 days, rotating through lessons)
+  const weekDays = [
+    "SATURDAY",
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+  ];
+
+  // Start from the most recent Saturday
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0=Sunday, 6=Saturday
+  const daysSinceSaturday = dayOfWeek === 6 ? 0 : dayOfWeek + 1;
+  const startDate = new Date(today);
+  startDate.setDate(today.getDate() - daysSinceSaturday);
+  startDate.setHours(0, 0, 0, 0);
+
+  for (let day = 0; day < 10; day++) {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + day);
+
+    const dayName = weekDays[day % weekDays.length];
+
+    for (let studentId = 1; studentId <= 50; studentId++) {
+      await prisma.attendance.create({
+        data: {
+          date,
+          present: Math.random() < 0.8,
+          studentId: `student${studentId}`,
+          lessonId: (studentId % 30) + 1, // rotates lessons 1–30
+        },
+      });
+    }
   }
 
   // Insert Event

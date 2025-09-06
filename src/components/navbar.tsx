@@ -6,7 +6,7 @@ import React from "react";
 const Navbar = async () => {
   const user = await currentUser();
   return (
-    <div className="flex items-center justify-between p-4 rounded-bl-2xl rounded-tl-2xl bg-gradient-to-r from-amber-200 to-blue-500">
+    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-[#FFE082] to-[#2196F3]">
       {/*search bar*/}
       <div className="hidden md:flex items-center gap-2 text-xs rounded-2xl ring-[1.5px] ring-gray-300 px-2">
         <Image src="/search.png" alt="" width={20} height={20} />

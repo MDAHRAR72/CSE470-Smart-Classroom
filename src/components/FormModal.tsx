@@ -1,21 +1,71 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import Image from "next/image";
-import { JSX, useState } from "react";
+import {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useActionState,
+  useEffect,
+  useState,
+} from "react";
 import dynamic from "next/dynamic";
+import { deleteSubject } from "@/lib/actions";
+import { toast } from "react-toastify";
+import { FormContainerProps } from "./FormContainer";
 
-const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
-  loading: () => <h1>Loading...</h1>,
-});
-const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+const deleteActionMap = {
+  subject: deleteSubject,
+  // class: deleteClass,
+  // teacher: deleteTeacher,
+  // student: deleteStudent,
+  // exam: deleteExam,
+};
+
+// const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
+//   loading: () => <h1>Loading...</h1>,
+// });
+// const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+//   loading: () => <h1>Loading...</h1>,
+// });
+const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 
 const forms: {
-  [key: string]: (type: "create" | "update", data?: any) => JSX.Element;
+  [key: string]: (
+    setOpen: Dispatch<SetStateAction<boolean>>,
+    type: "create" | "update",
+    data?: any,
+    relatedData?: any
+  ) => JSX.Element;
 } = {
-  teacher: (type, data) => <TeacherForm type={type} data={data} />,
-  student: (type, data) => <StudentForm type={type} data={data} />,
+  // teacher: (setOpen, type, data, relatedData) => (
+  //   <TeacherForm
+  //     type={type}
+  //     data={data}
+  //     setOpen={setOpen}
+  //     relatedData={relatedData}
+  //   />
+  // ),
+  // student: (setOpen, type, data, relatedData) => (
+  //   <StudentForm
+  //     type={type}
+  //     data={data}
+  //     setOpen={setOpen}
+  //     relatedData={relatedData}
+  //   />
+  // ),
+  subject: (setOpen, type, data, relatedData) => (
+    <SubjectForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
 };
 
 const FormModal = ({
@@ -23,23 +73,8 @@ const FormModal = ({
   type,
   data,
   id,
-}: {
-  table:
-    | "teacher"
-    | "student"
-    | "subject"
-    | "class"
-    | "lesson"
-    | "exam"
-    | "assignment"
-    | "gradesheet"
-    | "attendance"
-    | "event"
-    | "announcement";
-  type: "create" | "update" | "delete";
-  data?: any;
-  id?: number | string;
-}) => {
+  relatedData,
+}: FormContainerProps & { relatedData?: any }) => {
   const size = type === "create" ? "w-8 h-8" : "w-7 h-7";
   const bgColor =
     type === "create"
@@ -47,11 +82,25 @@ const FormModal = ({
       : type === "update"
       ? "bg-[#C3EBFA]"
       : "bg-[#CFCEFF]";
+
   const [open, setOpen] = useState(false);
 
   const Form = () => {
+    const [state, formAction] = useActionState(deleteActionMap[table], {
+      success: false,
+      error: false,
+    });
+
+    useEffect(() => {
+      if (state.success) {
+        toast(`Subject has been ${type === "create" ? "created" : "updated"}!`);
+        setOpen(false);
+      }
+    }, [state, type, setOpen]);
+
     return type === "delete" && id ? (
-      <form action="" className="p-4 flex flex-col gap-4">
+      <form action={formAction} className="p-4 flex flex-col gap-4">
+        <input type="text | number" name="id" value={id} hidden></input>
         <span className="text-center font-medium">
           Are you sure you want to delte this?
         </span>
@@ -60,7 +109,7 @@ const FormModal = ({
         </button>
       </form>
     ) : type === "create" || type === "update" ? (
-      forms[table](type, data)
+      forms[table](setOpen, type, data, relatedData)
     ) : (
       "Form not Created!"
     );

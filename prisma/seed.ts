@@ -60,8 +60,8 @@ async function main() {
       data: {
         id: `teacher${i}`, // Unique ID for the teacher
         username: `teacher${i}`,
-        firstname: `TfirstName${i}`,
-        lastname: `TlastName${i}`,
+        firstname: `TFName${i}`,
+        lastname: `TLName${i}`,
         email: `teacher${i}@example.com`,
         phone: `123-456-789${i}`,
         address: `Address${i}`,
@@ -101,8 +101,8 @@ async function main() {
       data: {
         id: `student${i}`,
         username: `student${i}`,
-        firstname: `SfirstName${i}`,
-        lastname: `SLastName ${i}`,
+        firstname: `SFName${i}`,
+        lastname: `SLName ${i}`,
         email: `student${i}@example.com`,
         phone: `987-654-321${i}`,
         address: `Address${i}`,

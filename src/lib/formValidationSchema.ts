@@ -7,3 +7,44 @@ export const subjectSchema = z.object({
 });
 
 export type SubjectSchema = z.infer<typeof subjectSchema>;
+
+export const teacherSchema = z.object({
+  id: z.string().optional(),
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters long!" })
+    .max(20, { message: "Username must be at most 20 characters long!" }),
+  email: z
+    .email({ message: "Invalid email address!" })
+    .optional()
+    .or(z.literal("")),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long!" }),
+  firstName: z.string().min(1, { message: "First name is required!" }),
+  lastName: z.string().min(1, { message: "Last name is required!" }),
+  phone: z.string().optional(),
+  address: z.string(),
+  bloodType: z.string().min(1, { message: "Blood Type is required!" }),
+  birthDate: z
+    .string()
+    .min(1, { message: "Birth Date is required!" })
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: "Invalid date format",
+    }),
+  sex: z.enum(["MALE", "FEMALE"], { message: "Sex is required!" }),
+  img: z.string().optional(),
+  subjects: z.array(z.string()).optional(),
+});
+
+export type TeacherSchema = z.infer<typeof teacherSchema>;
+
+export const classSchema = z.object({
+  id: z.coerce.number().optional(),
+  name: z.string().min(1, { message: "Subject name is required!" }),
+  capacity: z.coerce.number().min(1, { message: "Capacity is required!" }),
+  gradeId: z.string().min(1, { message: "Grade  is required!" }),
+  classTeacherId: z.string().min(1, { message: "Class Teacher is required!" }),
+});
+
+export type ClassSchema = z.infer<typeof classSchema>;

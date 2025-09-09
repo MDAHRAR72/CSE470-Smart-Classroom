@@ -12,27 +12,27 @@ import {
   useState,
 } from "react";
 import dynamic from "next/dynamic";
-import { deleteSubject } from "@/lib/actions";
+import { deleteSubject, deleteTeacher } from "@/lib/actions";
 import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
 
 const deleteActionMap = {
   subject: deleteSubject,
+  teacher: deleteTeacher,
   // class: deleteClass,
-  // teacher: deleteTeacher,
   // student: deleteStudent,
   // exam: deleteExam,
 };
 
-// const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
-//   loading: () => <h1>Loading...</h1>,
-// });
-// const StudentForm = dynamic(() => import("./forms/StudentForm"), {
-//   loading: () => <h1>Loading...</h1>,
-// });
 const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
   loading: () => <h1>Loading...</h1>,
 });
+const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+// const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+//   loading: () => <h1>Loading...</h1>,
+// });
 
 const forms: {
   [key: string]: (
@@ -42,22 +42,6 @@ const forms: {
     relatedData?: any
   ) => JSX.Element;
 } = {
-  // teacher: (setOpen, type, data, relatedData) => (
-  //   <TeacherForm
-  //     type={type}
-  //     data={data}
-  //     setOpen={setOpen}
-  //     relatedData={relatedData}
-  //   />
-  // ),
-  // student: (setOpen, type, data, relatedData) => (
-  //   <StudentForm
-  //     type={type}
-  //     data={data}
-  //     setOpen={setOpen}
-  //     relatedData={relatedData}
-  //   />
-  // ),
   subject: (setOpen, type, data, relatedData) => (
     <SubjectForm
       type={type}
@@ -66,6 +50,23 @@ const forms: {
       relatedData={relatedData}
     />
   ),
+  teacher: (setOpen, type, data, relatedData) => (
+    <TeacherForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+
+  // student: (setOpen, type, data, relatedData) => (
+  //   <StudentForm
+  //     type={type}
+  //     data={data}
+  //     setOpen={setOpen}
+  //     relatedData={relatedData}
+  //   />
+  // ),
 };
 
 const FormModal = ({

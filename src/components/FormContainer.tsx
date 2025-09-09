@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import React from "react";
 import FormModal from "./FormModal";
 import { prisma } from "@/lib/prisma";
@@ -31,10 +33,18 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
         relatedData = { teachers: subjectTeachers };
         break;
 
+      case "teacher":
+        const teacherSubjects = await prisma.subject.findMany({
+          select: { id: true, name: true },
+        });
+        relatedData = { subjects: teacherSubjects };
+        break;
+
       default:
         break;
     }
   }
+
   return (
     <FormModal
       table={table}

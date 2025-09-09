@@ -62,7 +62,7 @@ const SubjectForm = ({
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
-        {type === "create" ? "Create a new subject" : "Update the subject"}
+        {type === "create" ? "Create a new Subject" : "Update the Subject"}
       </h1>
       <div className="flex justify-between flex-wrap gap-4">
         <InputField

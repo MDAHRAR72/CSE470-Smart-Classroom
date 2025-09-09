@@ -1,17 +1,21 @@
 import Announcements from "@/components/Announcements";
 import BigCalendar from "@/components/BigCalendar";
-import FormModal from "@/components/FormModal";
 import Performance from "@/components/Performance";
 import { role } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { notFound } from "next/navigation";
+import FormContainer from "@/components/FormContainer";
 
-const SingleTeacherPage = async ({ params }: { params: { id: string } }) => {
+const SingleTeacherPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const resolvedParams = await params;
   const teacher = await prisma.teacher.findUnique({
-    where: { id: params.id },
+    where: { id: resolvedParams.id },
     include: {
       subjects: true,
       classes: true,
@@ -50,7 +54,7 @@ const SingleTeacherPage = async ({ params }: { params: { id: string } }) => {
                   {teacher.firstname} {teacher.lastname}
                 </h1>
                 {role === "admin" && (
-                  <FormModal
+                  <FormContainer
                     table="teacher"
                     type="update"
                     data={{
@@ -62,7 +66,7 @@ const SingleTeacherPage = async ({ params }: { params: { id: string } }) => {
                       phone: teacher.phone,
                       address: teacher.address,
                       bloodType: teacher.bloodType,
-                      birthDate: teacher.birthday.toISOString().split('T')[0],
+                      birthDate: teacher.birthday.toISOString().split("T")[0],
                       sex: teacher.sex.toLowerCase(),
                       img: teacher.img,
                     }}
@@ -119,7 +123,9 @@ const SingleTeacherPage = async ({ params }: { params: { id: string } }) => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">{teacher.subjects.length}</h1>
+                <h1 className="text-xl font-semibold">
+                  {teacher.subjects.length}
+                </h1>
                 <span className="text-sm text-gray-500">Subjects</span>
               </div>
             </div>
@@ -133,7 +139,9 @@ const SingleTeacherPage = async ({ params }: { params: { id: string } }) => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">{teacher.lessons.length}</h1>
+                <h1 className="text-xl font-semibold">
+                  {teacher.lessons.length}
+                </h1>
                 <span className="text-sm text-gray-500">Lessons</span>
               </div>
             </div>
@@ -147,7 +155,9 @@ const SingleTeacherPage = async ({ params }: { params: { id: string } }) => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">{teacher.classes.length}</h1>
+                <h1 className="text-xl font-semibold">
+                  {teacher.classes.length}
+                </h1>
                 <span className="text-sm text-gray-500">Classes</span>
               </div>
             </div>

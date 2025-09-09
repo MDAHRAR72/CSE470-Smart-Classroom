@@ -5,7 +5,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
-import Image from "next/image";
 import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchema";
 import {
   Dispatch,
@@ -63,7 +62,7 @@ const TeacherForm = ({
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
-        {type === "create" ? "Create a new Teacher" : "Update the Teacher"}
+        {type === "create" ? "Create a new Teacher" : "Update Teacher"}
       </h1>
       <div className="flex flex-col gap-2 w-full justify-center items-center">
         {/* <label

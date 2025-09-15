@@ -24,7 +24,7 @@ const SingleStudentPage = async ({ params }: { params: { id: string } }) => {
         },
       },
       grade: true,
-      gradesheet: {
+      gradesheets: {
         include: {
           exam: true,
           assignment: true,
@@ -71,7 +71,7 @@ const SingleStudentPage = async ({ params }: { params: { id: string } }) => {
                       phone: student.phone,
                       address: student.address,
                       bloodType: student.bloodType,
-                      birthDate: student.birthday.toISOString().split('T')[0],
+                      birthDate: student.birthday.toISOString().split("T")[0],
                       sex: student.sex.toLowerCase(),
                       img: student.img,
                     }}
@@ -142,7 +142,9 @@ const SingleStudentPage = async ({ params }: { params: { id: string } }) => {
                 className="w-6 h-6"
               />
               <div className="">
-                <h1 className="text-xl font-semibold">{student.class.lessons.length}</h1>
+                <h1 className="text-xl font-semibold">
+                  {student.class.lessons.length}
+                </h1>
                 <span className="text-sm text-gray-500">Lessons</span>
               </div>
             </div>

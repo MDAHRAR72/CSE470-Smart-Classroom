@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import Image from "next/image";
@@ -23,6 +21,9 @@ const deleteActionMap = {
   // student: deleteStudent,
   // exam: deleteExam,
 };
+
+// Create a type for the valid delete action keys
+type DeleteActionKey = keyof typeof deleteActionMap;
 
 const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
   loading: () => <h1>Loading...</h1>,
@@ -87,30 +88,56 @@ const FormModal = ({
   const [open, setOpen] = useState(false);
 
   const Form = () => {
-    const [state, formAction] = useActionState(deleteActionMap[table], {
-      success: false,
-      error: false,
-    });
+    // Check if table is a valid key for delete actions
+    const isDeleteAction = (table as string) in deleteActionMap;
+
+    const [state, formAction] = useActionState(
+      isDeleteAction
+        ? deleteActionMap[table as DeleteActionKey]
+        : () => Promise.resolve({ success: false, error: false }),
+      {
+        success: false,
+        error: false,
+      }
+    );
 
     useEffect(() => {
       if (state.success) {
-        toast(`Subject has been ${type === "create" ? "created" : "updated"}!`);
+        toast(
+          `${table} has been ${
+            type === "create"
+              ? "created"
+              : type === "update"
+              ? "updated"
+              : "deleted"
+          }!`
+        );
         setOpen(false);
       }
-    }, [state, type, setOpen]);
+    }, [state, type, setOpen, table]);
 
     return type === "delete" && id ? (
-      <form action={formAction} className="p-4 flex flex-col gap-4">
-        <input type="text | number" name="id" value={id} hidden></input>
-        <span className="text-center font-medium">
-          Are you sure you want to delte this?
-        </span>
-        <button className="bg-red-700 text-white p-4 rounded-xl border-none w-max self-center">
-          Delete
-        </button>
-      </form>
+      isDeleteAction ? (
+        <form action={formAction} className="p-4 flex flex-col gap-4">
+          <input type="hidden" name="id" value={id} />
+          <span className="text-center font-medium">
+            Are you sure you want to delete this?
+          </span>
+          <button className="bg-red-700 text-white p-4 rounded-xl border-none w-max self-center">
+            Delete
+          </button>
+        </form>
+      ) : (
+        <div className="p-4 text-center">
+          Delete action not available for this table
+        </div>
+      )
     ) : type === "create" || type === "update" ? (
-      forms[table](setOpen, type, data, relatedData)
+      forms[table] ? (
+        forms[table](setOpen, type, data, relatedData)
+      ) : (
+        <div className="p-4 text-center">Form not available for this table</div>
+      )
     ) : (
       "Form not Created!"
     );
